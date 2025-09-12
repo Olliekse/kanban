@@ -31,9 +31,9 @@ export default function Home() {
     const handleOpenModal = () => {
       setIsModalOpen(true);
     };
-    
-    window.addEventListener('openTaskModal', handleOpenModal);
-    return () => window.removeEventListener('openTaskModal', handleOpenModal);
+
+    window.addEventListener("openTaskModal", handleOpenModal);
+    return () => window.removeEventListener("openTaskModal", handleOpenModal);
   }, []);
 
   const fetchTasks = async () => {
@@ -100,7 +100,7 @@ export default function Home() {
   return (
     <div className="bg-light-bg min-h-screen p-6">
       {/* Remove the duplicate header section */}
-      
+
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         {/* Todo Column */}
         <div className="rounded-lg bg-gray-100 p-4">
