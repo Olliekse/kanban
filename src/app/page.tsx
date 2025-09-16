@@ -1,64 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import TaskModal from "@/components/TaskModal";
-
-interface Task {
-  id: string;
-  title: string;
-  description?: string;
-  status: "todo" | "in-progress" | "done";
-  created_at: string;
-  updated_at: string;
-  created_by_id: string;
-  subtasks: Subtask[];
-}
-
-interface Subtask {
-  id: string;
-  title: string;
-  completed: boolean;
-  task_id: string;
-}
+import { useTasks } from "@/contexts/TasksContext";
+import { useModal } from "@/contexts/ModalContext";
+import BoardsModal from "@/components/BoardsModal";
 
 export default function Home() {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // Listen for the header button click
-  useEffect(() => {
-    const handleOpenModal = () => {
-      setIsModalOpen(true);
-    };
-
-    window.addEventListener("openTaskModal", handleOpenModal);
-    return () => window.removeEventListener("openTaskModal", handleOpenModal);
-  }, []);
-
-  const fetchTasks = async () => {
-    try {
-      const response = await fetch("/api/tasks");
-      if (response.ok) {
-        const data = (await response.json()) as Task[];
-        setTasks(data);
-      } else {
-        console.error("Failed to fetch tasks");
-      }
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    void fetchTasks();
-  }, []);
-
-  const handleTaskCreated = () => {
-    void fetchTasks();
-  };
+  const { tasks, isLoading } = useTasks();
+  const { openTasksModal, isBoardsModalOpen } = useModal();
 
   const getTasksByStatus = (status: string) => {
     return tasks.filter((task) => task.status === status);
@@ -80,7 +29,7 @@ export default function Home() {
         <div className="flex flex-col items-center gap-[25px]">
           <p>This board is empty. Create a new task to get started.</p>
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => openTasksModal}
             className="bg-primary flex h-12 w-[174px] items-center justify-center rounded-3xl"
           >
             <span className="text-[15px] font-bold text-white">
@@ -88,37 +37,28 @@ export default function Home() {
             </span>
           </button>
         </div>
-        <TaskModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onTaskCreated={handleTaskCreated}
-        />
+
+        <TaskModal />
       </div>
     );
   }
 
   return (
     <div className="bg-light-bg min-h-screen p-6">
-      {/* Remove the duplicate header section */}
-
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+      <div className="grid grid-cols-[280px_280px_280px] gap-6 overflow-x-auto">
         {/* Todo Column */}
-        <div className="rounded-lg bg-gray-100 p-4">
-          <h2 className="mb-4 text-lg font-semibold text-gray-600">
-            Todo ({getTasksByStatus("todo").length})
-          </h2>
+        <div className="">
+          <div className="mb-4 flex items-center gap-3">
+            <div className="h-[15px] w-[15px] rounded-xl bg-[#49C4E5]"></div>
+            <h2 className="text-light-text-secondary font-[Plus_Jakarta_Sans] text-[12px] font-bold tracking-[2.4px] uppercase">
+              Todo ({getTasksByStatus("todo").length})
+            </h2>
+          </div>
           <div className="space-y-3">
             {getTasksByStatus("todo").map((task) => (
-              <div
-                key={task.id}
-                className="rounded-lg border bg-white p-4 shadow-sm"
-              >
+              <div key={task.id} className="rounded-lg bg-white p-4 shadow-sm">
                 <h3 className="font-semibold text-gray-800">{task.title}</h3>
-                {task.description && (
-                  <p className="mt-2 text-sm text-gray-600">
-                    {task.description}
-                  </p>
-                )}
+
                 {task.subtasks.length > 0 && (
                   <div className="mt-3">
                     <p className="mb-2 text-xs text-gray-500">Subtasks:</p>
@@ -136,17 +76,17 @@ export default function Home() {
           </div>
         </div>
 
-        {/* In Progress Column */}
-        <div className="rounded-lg bg-gray-100 p-4">
-          <h2 className="mb-4 text-lg font-semibold text-gray-600">
-            In Progress ({getTasksByStatus("in-progress").length})
-          </h2>
+        {/* Doing Column */}
+        <div className="rounded-lg">
+          <div className="mb-4 flex items-center gap-3">
+            <div className="h-[15px] w-[15px] rounded-xl bg-[#8471F2]"></div>
+            <h2 className="text-light-text-secondary font-[Plus_Jakarta_Sans] text-[12px] font-bold tracking-[2.4px] uppercase">
+              Doing ({getTasksByStatus("in-progress").length})
+            </h2>
+          </div>
           <div className="space-y-3">
             {getTasksByStatus("in-progress").map((task) => (
-              <div
-                key={task.id}
-                className="rounded-lg border bg-white p-4 shadow-sm"
-              >
+              <div key={task.id} className="rounded-lg bg-white p-4 shadow-sm">
                 <h3 className="font-semibold text-gray-800">{task.title}</h3>
                 {task.description && (
                   <p className="mt-2 text-sm text-gray-600">
@@ -171,16 +111,16 @@ export default function Home() {
         </div>
 
         {/* Done Column */}
-        <div className="rounded-lg bg-gray-100 p-4">
-          <h2 className="mb-4 text-lg font-semibold text-gray-600">
-            Done ({getTasksByStatus("done").length})
-          </h2>
+        <div className="rounded-lg">
+          <div className="mb-4 flex items-center gap-3">
+            <div className="h-[15px] w-[15px] rounded-xl bg-[#67E2AE]"></div>
+            <h2 className="text-light-text-secondary font-[Plus_Jakarta_Sans] text-[12px] font-bold tracking-[2.4px] uppercase">
+              Done ({getTasksByStatus("done").length})
+            </h2>
+          </div>
           <div className="space-y-3">
             {getTasksByStatus("done").map((task) => (
-              <div
-                key={task.id}
-                className="rounded-lg border bg-white p-4 shadow-sm"
-              >
+              <div key={task.id} className="rounded-lg bg-white p-4 shadow-sm">
                 <h3 className="font-semibold text-gray-800">{task.title}</h3>
                 {task.description && (
                   <p className="mt-2 text-sm text-gray-600">
@@ -202,14 +142,9 @@ export default function Home() {
               </div>
             ))}
           </div>
+          {isBoardsModalOpen && <BoardsModal />}
         </div>
       </div>
-
-      <TaskModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onTaskCreated={handleTaskCreated}
-      />
     </div>
   );
 }

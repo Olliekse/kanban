@@ -1,5 +1,6 @@
 "use client";
 
+import { useModal } from "@/contexts/ModalContext";
 import { useState } from "react";
 
 interface Task {
@@ -20,22 +21,15 @@ interface Subtask {
   task_id: string;
 }
 
-interface TaskModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onTaskCreated?: () => void; 
-}
 
-export default function TaskModal({
-  isOpen,
-  onClose,
-  onTaskCreated,
-}: TaskModalProps) {
+export default function TaskModal() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("todo");
   const [subtasks, setSubtasks] = useState([{ title: "" }]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const {openTasksModal, closeTasksModal} = useModal();
 
   const addSubtask = () => {
     setSubtasks([...subtasks, { title: "" }]);
@@ -50,6 +44,8 @@ export default function TaskModal({
     newSubtasks[index] = { title };
     setSubtasks(newSubtasks);
   };
+
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,12 +91,9 @@ export default function TaskModal({
       setDescription("");
       setStatus("todo");
       setSubtasks([{ title: "" }]);
-      onClose();
+      closeTasksModal();
 
-      // Notify parent component to refresh the task list
-      if (onTaskCreated) {
-        onTaskCreated();
-      }
+     
     } catch (error) {
       console.error("Error creating task:", error);
       alert("Failed to create task. Please try again.");
@@ -109,7 +102,7 @@ export default function TaskModal({
     }
   };
 
-  if (!isOpen) return null;
+ 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -177,7 +170,7 @@ export default function TaskModal({
             className="mb-6 w-full cursor-pointer appearance-none rounded border border-gray-300 bg-white px-4 py-2 pr-10"
           >
             <option value="todo">Todo</option>
-            <option value="in-progress">In Progress</option>
+            <option value="in-progress">Doing</option>
             <option value="done">Done</option>
           </select>
 
