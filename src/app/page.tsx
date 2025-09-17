@@ -1,13 +1,19 @@
 "use client";
 
-import TaskModal from "@/components/TaskModal";
+import TaskModal from "@/components/AddTaskModal";
 import { useTasks } from "@/contexts/TasksContext";
 import { useModal } from "@/contexts/ModalContext";
 import BoardsModal from "@/components/BoardsModal";
+import TaskDetailsModal from "@/components/TaskDetailsModal";
 
 export default function Home() {
   const { tasks, isLoading } = useTasks();
-  const { openTasksModal, isBoardsModalOpen } = useModal();
+  const {
+    openTasksModal,
+    isBoardsModalOpen,
+    isTaskDetailsModalOpen,
+    openTaskDetailsModal,
+  } = useModal();
 
   const getTasksByStatus = (status: string) => {
     return tasks.filter((task) => task.status === status);
@@ -56,7 +62,11 @@ export default function Home() {
           </div>
           <div className="space-y-3">
             {getTasksByStatus("todo").map((task) => (
-              <div key={task.id} className="rounded-lg bg-white p-4 shadow-sm">
+              <div
+                key={task.id}
+                onClick={() => openTaskDetailsModal()}
+                className="cursor-pointer rounded-lg bg-white p-4 shadow-sm"
+              >
                 <h3 className="font-semibold text-gray-800">{task.title}</h3>
 
                 {task.subtasks.length > 0 && (
@@ -81,12 +91,16 @@ export default function Home() {
           <div className="mb-4 flex items-center gap-3">
             <div className="h-[15px] w-[15px] rounded-xl bg-[#8471F2]"></div>
             <h2 className="text-light-text-secondary font-[Plus_Jakarta_Sans] text-[12px] font-bold tracking-[2.4px] uppercase">
-              Doing ({getTasksByStatus("in-progress").length})
+              Doing ({getTasksByStatus("doing").length})
             </h2>
           </div>
           <div className="space-y-3">
-            {getTasksByStatus("in-progress").map((task) => (
-              <div key={task.id} className="rounded-lg bg-white p-4 shadow-sm">
+            {getTasksByStatus("doing").map((task) => (
+              <div
+                onClick={() => openTaskDetailsModal()}
+                key={task.id}
+                className="cursor-pointer rounded-lg bg-white p-4 shadow-sm"
+              >
                 <h3 className="font-semibold text-gray-800">{task.title}</h3>
                 {task.description && (
                   <p className="mt-2 text-sm text-gray-600">
@@ -120,7 +134,11 @@ export default function Home() {
           </div>
           <div className="space-y-3">
             {getTasksByStatus("done").map((task) => (
-              <div key={task.id} className="rounded-lg bg-white p-4 shadow-sm">
+              <div
+                key={task.id}
+                onClick={() => openTaskDetailsModal()}
+                className="cursor-pointer rounded-lg bg-white p-4 shadow-sm"
+              >
                 <h3 className="font-semibold text-gray-800">{task.title}</h3>
                 {task.description && (
                   <p className="mt-2 text-sm text-gray-600">
@@ -143,6 +161,8 @@ export default function Home() {
             ))}
           </div>
           {isBoardsModalOpen && <BoardsModal />}
+
+          {isTaskDetailsModalOpen && <TaskDetailsModal />}
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ import Toggle from "./Toggle";
 function BoardsModal() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="absolute top-20 flex w-[264px] flex-col justify-center rounded-lg bg-white py-4">
+      <div className="absolute top-22 flex w-[264px] flex-col justify-center rounded-lg bg-white py-4">
         <h3 className="text-light-text-secondary self-start pr-6 pb-[19px] pl-6 text-[12px] font-bold tracking-[2.4px] uppercase">
           All boards (X)
         </h3>
