@@ -1,12 +1,15 @@
-import { useState } from "react";
+"use client";
+
+import { useTheme } from "@/contexts/ThemeContext";
 
 interface ToggleProps {}
 
 function Toggle() {
-  const [isActive, setIsActive] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+  const isActive = theme === "dark";
 
   const handleToggleChange = () => {
-    setIsActive(!isActive);
+    toggleTheme();
   };
 
   return (
@@ -16,9 +19,9 @@ function Toggle() {
           type="checkbox"
           checked={isActive}
           onChange={handleToggleChange}
-          className="sr-only peer"
+          className="peer sr-only"
         />
-        <div className="block h-5 w-10 rounded-full  bg-primary"></div>
+        <div className="bg-primary block h-5 w-10 rounded-full"></div>
         <div className="dot absolute top-[3px] left-[3px] h-[14px] w-[14px] rounded-full bg-white transition-transform peer-checked:translate-x-5"></div>
       </div>
     </label>

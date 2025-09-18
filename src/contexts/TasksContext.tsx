@@ -12,7 +12,8 @@ interface Task {
   id: string;
   title: string;
   description?: string;
-  status: "todo" | "in-progress" | "done";
+  column_id: string;
+  board_id: string;
   created_at: string;
   updated_at: string;
   created_by_id: string;
@@ -29,7 +30,7 @@ interface Subtask {
 interface TasksContextType {
   tasks: Task[];
   isLoading: boolean;
-  refreshTasks: () => void;
+  refreshTasks: (boardId?: string) => void;
 }
 
 const TasksContext = createContext<TasksContextType | undefined>(undefined);
@@ -38,9 +39,10 @@ export function TasksProvider({ children }: { children: ReactNode }) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchTasks = async () => {
+  const fetchTasks = async (boardId?: string) => {
     try {
-      const response = await fetch("/api/tasks");
+      const url = boardId ? `/api/tasks?board_id=${boardId}` : "/api/tasks";
+      const response = await fetch(url);
       if (response.ok) {
         const data = (await response.json()) as Task[];
         setTasks(data);
@@ -54,8 +56,8 @@ export function TasksProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const refreshTasks = () => {
-    void fetchTasks();
+  const refreshTasks = (boardId?: string) => {
+    void fetchTasks(boardId);
   };
 
   useEffect(() => {

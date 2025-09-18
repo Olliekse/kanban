@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase";
 interface UpdateTaskRequest {
   title: string;
   description?: string;
-  status: "todo" | "in-progress" | "done";
+  column_id: string;
 }
 
 // PUT /api/tasks/[id] - Update a task
@@ -16,19 +16,14 @@ export async function PUT(
   try {
     const { id } = params;
     const body = (await request.json()) as UpdateTaskRequest;
-    const { title, description, status } = body;
+    const { title, description, column_id } = body;
 
     // Validate required fields
-    if (!title || !status) {
+    if (!title || !column_id) {
       return NextResponse.json(
-        { error: "Title and status are required" },
+        { error: "Title and column_id are required" },
         { status: 400 },
       );
-    }
-
-    // Validate status
-    if (!["todo", "in-progress", "done"].includes(status)) {
-      return NextResponse.json({ error: "Invalid status" }, { status: 400 });
     }
 
     const { data: task, error } = (await supabase
@@ -36,7 +31,8 @@ export async function PUT(
       .update({
         title: title.trim(),
         description: description?.trim() ?? null,
-        status,
+        column_id,
+        status: "todo", // Temporary fallback for old schema
       })
       .eq("id", id)
       .eq("created_by_id", "anonymous")

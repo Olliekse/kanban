@@ -1,16 +1,20 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export function createClient() {
+  return createSupabaseClient(supabaseUrl, supabaseAnonKey);
+}
 
+export const supabase = createClient();
 
 export interface Task {
   id: string;
   title: string;
   description?: string;
-  status: "todo" | "in-progress" | "done";
+  column_id: string;
+  board_id: string;
   created_at: string;
   updated_at: string;
   created_by_id: string;

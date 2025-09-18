@@ -4,8 +4,9 @@ import Header from "@/components/Header";
 import "@/styles/globals.css";
 import { TasksProvider } from "@/contexts/TasksContext";
 import BoardsModal from "@/components/BoardsModal";
-
 import { ModalProvider } from "@/contexts/ModalContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import { BoardsProvider } from "@/contexts/BoardsContext";
 
 export default function RootLayout({
   children,
@@ -21,12 +22,16 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <ModalProvider>
-          <TasksProvider>
-            <Header />
-            {children}
-          </TasksProvider>
-        </ModalProvider>
+        <ThemeProvider>
+          <BoardsProvider>
+            <ModalProvider>
+              <TasksProvider>
+                <Header />
+                {children}
+              </TasksProvider>
+            </ModalProvider>
+          </BoardsProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

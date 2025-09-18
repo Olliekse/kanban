@@ -2,12 +2,15 @@
 
 import { useModal } from "@/contexts/ModalContext";
 import { useState } from "react";
+import { useTasks } from "@/contexts/TasksContext";
+import { useBoards } from "@/contexts/BoardsContext";
 
 interface Task {
   id: string;
   title: string;
   description?: string;
-  status: "todo" | "in-progress" | "done";
+  column_id: string;
+  board_id: string;
   created_at: string;
   updated_at: string;
   created_by_id: string;
@@ -21,15 +24,16 @@ interface Subtask {
   task_id: string;
 }
 
-
 export default function AddTaskModal() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("todo");
+  const [columnId, setColumnId] = useState("");
   const [subtasks, setSubtasks] = useState([{ title: "" }]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const {openTasksModal, closeTasksModal} = useModal();
+  const { openTasksModal, closeTasksModal } = useModal();
+  const { refreshTasks } = useTasks();
+  const { currentBoard } = useBoards();
 
   const addSubtask = () => {
     setSubtasks([...subtasks, { title: "" }]);
@@ -45,8 +49,6 @@ export default function AddTaskModal() {
     setSubtasks(newSubtasks);
   };
 
-
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -55,14 +57,15 @@ export default function AddTaskModal() {
       console.log("Submitting task with:", {
         title,
         description,
-        status,
+        columnId,
         subtasks,
       });
 
       const taskData = {
         title: title.trim(),
         description: description.trim() || "",
-        status: status as "todo" | "in-progress" | "done",
+        column_id: columnId,
+        board_id: currentBoard?.id,
         subtasks: subtasks
           .filter((subtask) => subtask.title.trim() !== "")
           .map((subtask) => ({ title: subtask.title.trim() })),
@@ -89,11 +92,11 @@ export default function AddTaskModal() {
       // Reset form and close modal
       setTitle("");
       setDescription("");
-      setStatus("todo");
+      setColumnId("");
       setSubtasks([{ title: "" }]);
+      // Refresh list and close modal
+      await refreshTasks(currentBoard?.id);
       closeTasksModal();
-
-     
     } catch (error) {
       console.error("Error creating task:", error);
       alert("Failed to create task. Please try again.");
@@ -102,7 +105,14 @@ export default function AddTaskModal() {
     }
   };
 
- 
+  // Don't render if no current board or no columns
+  if (
+    !currentBoard ||
+    !currentBoard.board_columns ||
+    currentBoard.board_columns.length === 0
+  ) {
+    return null;
+  }
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50">
@@ -165,13 +175,17 @@ export default function AddTaskModal() {
             Status
           </label>
           <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className="mb-6 w-full cursor-pointer appearance-none rounded border border-light-text-secondary/25 bg-white px-4 py-2"
+            value={columnId}
+            onChange={(e) => setColumnId(e.target.value)}
+            className="border-light-text-secondary/25 mb-6 w-full cursor-pointer appearance-none rounded border bg-white px-4 py-2"
+            required
           >
-            <option value="todo">Todo</option>
-            <option value="in-progress">Doing</option>
-            <option value="done">Done</option>
+            <option value="">Select a column</option>
+            {currentBoard?.board_columns?.map((column) => (
+              <option key={column.id} value={column.id}>
+                {column.name}
+              </option>
+            )) || []}
           </select>
 
           <button

@@ -2,20 +2,22 @@ import Image from "next/image";
 import "@/styles/globals.css";
 import { useTasks } from "@/contexts/TasksContext";
 import { useModal } from "@/contexts/ModalContext";
+import { useBoards } from "@/contexts/BoardsContext";
 
 function Header() {
   const { openTasksModal, isBoardsModalOpen, toggleBoardsModal } = useModal();
   const { tasks } = useTasks();
+  const { currentBoard } = useBoards();
 
   return (
-    <div className="relative z-60 flex w-full items-center justify-between bg-white px-4 py-5">
+    <div className="bg-theme-primary relative z-60 flex w-full items-center justify-between px-4 py-5">
       <Image src="/logo-mobile.svg" alt="header logo" width={24} height={25} />
       <div className="flex cursor-pointer gap-2 pl-4">
         <button
           onClick={() => toggleBoardsModal()}
-          className="not-last: cursor-pointer text-[18px] font-bold text-[#000112]"
+          className="not-last: text-theme-primary cursor-pointer text-[18px] font-bold"
         >
-          Platform Launch
+          {currentBoard?.name || "Select Board"}
         </button>
         {!isBoardsModalOpen ? (
           <Image

@@ -5,14 +5,18 @@ import { supabase } from "@/lib/supabase";
 interface CreateTaskRequest {
   title: string;
   description?: string;
-  status: "todo" | "in-progress" | "done";
+  column_id: string;
+  board_id: string;
   subtasks?: Array<{ title: string }>;
 }
 
 // GET /api/tasks - Get all tasks
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const { data: tasks, error } = await supabase
+    const { searchParams } = new URL(request.url);
+    const boardId = searchParams.get("board_id");
+
+    let query = supabase
       .from("tasks")
       .select(
         `
@@ -22,6 +26,13 @@ export async function GET() {
       )
       .eq("created_by_id", "anonymous")
       .order("created_at", { ascending: false });
+
+    // Filter by board_id if provided
+    if (boardId) {
+      query = query.eq("board_id", boardId);
+    }
+
+    const { data: tasks, error } = await query;
 
     if (error) {
       console.error("Error fetching tasks:", error);
@@ -45,19 +56,27 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as CreateTaskRequest;
-    const { title, description, status, subtasks } = body;
+    const { title, description, column_id, board_id, subtasks } = body;
+
+    console.log("Creating task with data:", {
+      title,
+      description,
+      column_id,
+      board_id,
+      subtasks,
+    });
 
     // Validate required fields
-    if (!title || !status) {
+    if (!title || !column_id || !board_id) {
+      console.error("Validation failed:", {
+        title: !!title,
+        column_id: !!column_id,
+        board_id: !!board_id,
+      });
       return NextResponse.json(
-        { error: "Title and status are required" },
+        { error: "Title, column_id, and board_id are required" },
         { status: 400 },
       );
-    }
-
-    // Validate status
-    if (!["todo", "in-progress", "done"].includes(status)) {
-      return NextResponse.json({ error: "Invalid status" }, { status: 400 });
     }
 
     // Create the task
@@ -66,7 +85,9 @@ export async function POST(request: NextRequest) {
       .insert({
         title: title.trim(),
         description: description?.trim() ?? null,
-        status,
+        column_id,
+        board_id,
+        status: "todo", // Temporary fallback for old schema
         created_by_id: "anonymous",
       })
       .select()
@@ -75,7 +96,7 @@ export async function POST(request: NextRequest) {
     if (taskError) {
       console.error("Error creating task:", taskError);
       return NextResponse.json(
-        { error: "Failed to create task" },
+        { error: `Failed to create task: ${taskError.message}` },
         { status: 500 },
       );
     }
