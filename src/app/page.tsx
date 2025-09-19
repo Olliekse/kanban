@@ -8,6 +8,7 @@ import BoardsModal from "@/components/BoardsModal";
 import TaskDetailsModal from "@/components/TaskDetailsModal";
 import EditTaskModal from "@/components/EditTaskModal";
 import DeleteTaskModal from "@/components/DeleteTaskModal";
+import DeleteBoardModal from "@/components/DeleteBoardModal";
 import AddBoardModal from "@/components/AddBoardModal";
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
     isEditTaskModalOpen,
     openEditTaskModal,
     isDeleteTaskModalOpen,
+    isDeleteBoardModalOpen,
     isAddBoardModalOpen,
   } = useModal();
 
@@ -62,27 +64,7 @@ export default function Home() {
         {isTaskDetailsModalOpen && <TaskDetailsModal />}
         {isEditTaskModalOpen && <EditTaskModal />}
         {isDeleteTaskModalOpen && <DeleteTaskModal />}
-      </div>
-    );
-  }
-
-  if (tasks.length === 0) {
-    return (
-      <div className="bg-theme-secondary text-theme-secondary flex h-[100vh] flex-col items-center justify-center px-4 text-center text-[18px] font-bold">
-        <div className="flex flex-col items-center gap-[25px]">
-          <p>This board is empty. Create a new task to get started.</p>
-          <button
-            onClick={() => openTasksModal()}
-            className="bg-primary flex h-12 w-[174px] items-center justify-center rounded-3xl"
-          >
-            <span className="text-[15px] font-bold text-white">
-              + Add new task
-            </span>
-          </button>
-        </div>
-
-        <TaskModal />
-        {isAddBoardModalOpen && <AddBoardModal />}
+        {isDeleteBoardModalOpen && <DeleteBoardModal />}
       </div>
     );
   }
@@ -100,16 +82,20 @@ export default function Home() {
   ];
 
   return (
-    <div className="bg-theme-secondary min-h-screen p-6">
+    <div
+      className={`bg-theme-secondary min-h-screen px-4 py-6 transition-[padding] duration-300 md:px-6 lg:px-8 ${
+        isBoardsModalOpen ? "md:pl-[289px]" : ""
+      }`}
+    >
       <div
-        className={`grid gap-6 overflow-x-auto`}
+        className={`grid gap-4 overflow-x-auto md:gap-6`}
         style={{
           gridTemplateColumns: `repeat(${currentBoard.board_columns?.length || 0}, 280px)`,
         }}
       >
         {currentBoard.board_columns?.map((column, index) => (
           <div key={column.id} className="">
-            <div className="mb-4 flex items-center gap-3">
+            <div className="mb-3 flex items-center gap-3 md:mb-4">
               <div
                 className="h-[15px] w-[15px] rounded-xl"
                 style={{
@@ -125,7 +111,7 @@ export default function Home() {
                 <div
                   key={task.id}
                   onClick={() => openTaskDetailsModal(task)}
-                  className="bg-theme-surface cursor-pointer rounded-lg p-4 shadow-sm"
+                  className="bg-theme-surface cursor-pointer rounded-lg p-4 shadow-sm md:p-5"
                 >
                   <h3 className="text-theme-primary font-semibold">
                     {task.title}
@@ -156,6 +142,7 @@ export default function Home() {
       {isEditTaskModalOpen && <EditTaskModal />}
       {isTasksModalOpen && <TaskModal />}
       {isDeleteTaskModalOpen && <DeleteTaskModal />}
+      {isDeleteBoardModalOpen && <DeleteBoardModal />}
       {isAddBoardModalOpen && <AddBoardModal />}
     </div>
   );

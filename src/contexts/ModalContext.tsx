@@ -26,6 +26,21 @@ interface Task {
   subtasks: Subtask[];
 }
 
+interface BoardColumn {
+  id: string;
+  name: string;
+  board_id: string;
+  created_at: string;
+}
+
+interface Board {
+  id: string;
+  name: string;
+  created_at: string;
+  updated_at: string;
+  board_columns: BoardColumn[];
+}
+
 interface ModalContextType {
   isTasksModalOpen: boolean;
   openTasksModal: () => void;
@@ -56,6 +71,12 @@ interface ModalContextType {
   isAddBoardModalOpen: boolean;
   openAddBoardModal: () => void;
   closeAddBoardModal: () => void;
+
+  // Delete Board modal
+  isDeleteBoardModalOpen: boolean;
+  openDeleteBoardModal: (board: Board) => void;
+  closeDeleteBoardModal: () => void;
+  selectedBoard: Board | null;
 }
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
@@ -68,6 +89,8 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isDeleteTaskModalOpen, setIsDeleteTaskModalOpen] = useState(false);
   const [isAddBoardModalOpen, setIsAddBoardModalOpen] = useState(false);
+  const [isDeleteBoardModalOpen, setIsDeleteBoardModalOpen] = useState(false);
+  const [selectedBoard, setSelectedBoard] = useState<Board | null>(null);
 
   const openTasksModal = () => setIsTasksModalOpen(true);
   const closeTasksModal = () => setIsTasksModalOpen(false);
@@ -99,6 +122,12 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   const openAddBoardModal = () => setIsAddBoardModalOpen(true);
   const closeAddBoardModal = () => setIsAddBoardModalOpen(false);
 
+  const openDeleteBoardModal = (board: Board) => {
+    setSelectedBoard(board);
+    setIsDeleteBoardModalOpen(true);
+  };
+  const closeDeleteBoardModal = () => setIsDeleteBoardModalOpen(false);
+
   const updateSelectedTask = (task: Task) => {
     setSelectedTask(task);
   };
@@ -111,7 +140,8 @@ export function ModalProvider({ children }: { children: ReactNode }) {
       isTaskDetailsModalOpen ||
       isEditTaskModalOpen ||
       isDeleteTaskModalOpen ||
-      isAddBoardModalOpen;
+      isAddBoardModalOpen ||
+      isDeleteBoardModalOpen;
 
     const body = document.body;
     if (isAnyModalOpen) {
@@ -137,6 +167,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
     isEditTaskModalOpen,
     isDeleteTaskModalOpen,
     isAddBoardModalOpen,
+    isDeleteBoardModalOpen,
   ]);
 
   return (
@@ -163,6 +194,10 @@ export function ModalProvider({ children }: { children: ReactNode }) {
         isAddBoardModalOpen,
         openAddBoardModal,
         closeAddBoardModal,
+        isDeleteBoardModalOpen,
+        openDeleteBoardModal,
+        closeDeleteBoardModal,
+        selectedBoard,
       }}
     >
       {children}
