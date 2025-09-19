@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import TaskModal from "@/components/AddTaskModal";
 import { useTasks } from "@/contexts/TasksContext";
 import { useBoards } from "@/contexts/BoardsContext";
@@ -10,6 +11,7 @@ import EditTaskModal from "@/components/EditTaskModal";
 import DeleteTaskModal from "@/components/DeleteTaskModal";
 import DeleteBoardModal from "@/components/DeleteBoardModal";
 import AddBoardModal from "@/components/AddBoardModal";
+import AddColumnModal from "@/components/AddColumnModal";
 
 export default function Home() {
   const { tasks, isLoading } = useTasks();
@@ -26,6 +28,8 @@ export default function Home() {
     isDeleteTaskModalOpen,
     isDeleteBoardModalOpen,
     isAddBoardModalOpen,
+    isAddColumnModalOpen,
+    openAddColumnModal,
   } = useModal();
 
   const getTasksByColumn = (columnId: string) => {
@@ -60,6 +64,7 @@ export default function Home() {
         {/* Include all modals */}
         {isBoardsModalOpen && <BoardsModal />}
         {isAddBoardModalOpen && <AddBoardModal />}
+        {isAddColumnModalOpen && <AddColumnModal />}
         {isTasksModalOpen && <TaskModal />}
         {isTaskDetailsModalOpen && <TaskDetailsModal />}
         {isEditTaskModalOpen && <EditTaskModal />}
@@ -90,7 +95,7 @@ export default function Home() {
       <div
         className={`grid gap-4 overflow-x-auto md:gap-6`}
         style={{
-          gridTemplateColumns: `repeat(${currentBoard.board_columns?.length || 0}, 280px)`,
+          gridTemplateColumns: `repeat(${(currentBoard.board_columns?.length || 0) + 1}, 280px)`,
         }}
       >
         {currentBoard.board_columns?.map((column, index) => (
@@ -134,7 +139,33 @@ export default function Home() {
             </div>
           </div>
         ))}
+
+        {/* New Column Button */}
+        <div className="flex h-[calc(100vh-200px)] min-h-[400px] items-center justify-center">
+          <button
+            onClick={openAddColumnModal}
+            className="bg-theme-new-column hover:bg-theme-secondary text-theme-secondary hover:text-theme-primary flex h-full w-full items-center justify-center rounded-lg transition-colors duration-200"
+          >
+            <span className="text-[24px] font-bold">+ New Column</span>
+          </button>
+        </div>
       </div>
+
+      {/* Show Sidebar Button - Only visible on tablet+ when sidebar is closed */}
+      {!isBoardsModalOpen && (
+        <button
+          onClick={openBoardsModal}
+          className="bg-primary fixed bottom-8 left-8 hidden h-12 w-14 items-center justify-center rounded-r-3xl md:flex"
+          aria-label="Show sidebar"
+        >
+          <Image
+            src="/icon-show-sidebar.svg"
+            alt="Show sidebar"
+            width={16}
+            height={11}
+          />
+        </button>
+      )}
 
       {/* Modals */}
       {isBoardsModalOpen && <BoardsModal />}
@@ -144,6 +175,7 @@ export default function Home() {
       {isDeleteTaskModalOpen && <DeleteTaskModal />}
       {isDeleteBoardModalOpen && <DeleteBoardModal />}
       {isAddBoardModalOpen && <AddBoardModal />}
+      {isAddColumnModalOpen && <AddColumnModal />}
     </div>
   );
 }

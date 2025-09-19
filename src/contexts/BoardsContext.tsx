@@ -31,6 +31,7 @@ interface BoardsContextType {
   setCurrentBoard: (board: Board) => void;
   refreshBoards: () => Promise<void>;
   createBoard: (name: string, columns: { name: string }[]) => Promise<Board>;
+  createColumn: (name: string, boardId: string) => Promise<BoardColumn>;
 }
 
 const BoardsContext = createContext<BoardsContextType | undefined>(undefined);
@@ -104,6 +105,47 @@ export function BoardsProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const createColumn = async (
+    name: string,
+    boardId: string,
+  ): Promise<BoardColumn> => {
+    try {
+      const response = await fetch("/api/columns", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, board_id: boardId }),
+      });
+
+      if (!response.ok) {
+        const errorData = (await response.json()) as { error?: string };
+        throw new Error(errorData.error ?? "Failed to create column");
+      }
+
+      const newColumn = await response.json();
+
+      // Update the current board with the new column
+      if (currentBoard && currentBoard.id === boardId) {
+        const updatedBoard = {
+          ...currentBoard,
+          board_columns: [...currentBoard.board_columns, newColumn],
+        };
+        setCurrentBoard(updatedBoard);
+
+        // Update the boards list
+        setBoards((prev) =>
+          prev.map((board) => (board.id === boardId ? updatedBoard : board)),
+        );
+      }
+
+      return newColumn;
+    } catch (err) {
+      console.error("Error creating column:", err);
+      throw err;
+    }
+  };
+
   useEffect(() => {
     fetchBoards();
   }, []);
@@ -118,6 +160,7 @@ export function BoardsProvider({ children }: { children: ReactNode }) {
         setCurrentBoard,
         refreshBoards,
         createBoard,
+        createColumn,
       }}
     >
       {children}
@@ -130,4 +173,3 @@ export function useBoards() {
   if (!context) throw new Error("useBoards must be used within BoardsProvider");
   return context;
 }
-

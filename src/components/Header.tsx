@@ -107,11 +107,7 @@ function Header() {
       {/* Tablet & up header */}
       <div className="bg-theme-primary border-theme relative z-60 hidden w-full items-center justify-between border-b px-6 py-5 md:flex">
         <div className="flex items-center gap-6">
-          <button
-            onClick={toggleBoardsModal}
-            aria-label="Toggle boards sidebar"
-            className="flex items-center"
-          >
+          <div className="flex items-center">
             <Image
               src={theme === "dark" ? "/logo-light.svg" : "/logo-dark.svg"}
               alt="kanban logo"
@@ -119,7 +115,7 @@ function Header() {
               height={25}
               className="cursor-pointer"
             />
-          </button>
+          </div>
           <div className="bg-theme h-10 w-px" />
           <div className="flex items-center gap-2">
             <span className="text-theme-primary text-[20px] font-bold">

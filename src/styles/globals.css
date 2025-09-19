@@ -19,6 +19,7 @@
   --color-border: #e4ebfa;
   --color-surface: #ffffff;
   --color-surface-secondary: #f4f7fd;
+  --color-new-column-bg: #e9effa;
 }
 
 /* Dark theme overrides */
@@ -30,6 +31,7 @@
   --color-border: #3e3f4e;
   --color-surface: #2b2c37;
   --color-surface-secondary: #20212c;
+  --color-new-column-bg: #2b2c37;
 }
 
 /* Additional utility classes for theme-aware styling */
@@ -59,4 +61,8 @@
 
 .border-theme {
   border-color: var(--color-border);
+}
+
+.bg-theme-new-column {
+  background-color: var(--color-new-column-bg);
 }

@@ -77,6 +77,11 @@ interface ModalContextType {
   openDeleteBoardModal: (board: Board) => void;
   closeDeleteBoardModal: () => void;
   selectedBoard: Board | null;
+
+  // Add Column modal
+  isAddColumnModalOpen: boolean;
+  openAddColumnModal: () => void;
+  closeAddColumnModal: () => void;
 }
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
@@ -91,6 +96,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   const [isAddBoardModalOpen, setIsAddBoardModalOpen] = useState(false);
   const [isDeleteBoardModalOpen, setIsDeleteBoardModalOpen] = useState(false);
   const [selectedBoard, setSelectedBoard] = useState<Board | null>(null);
+  const [isAddColumnModalOpen, setIsAddColumnModalOpen] = useState(false);
 
   const openTasksModal = () => setIsTasksModalOpen(true);
   const closeTasksModal = () => setIsTasksModalOpen(false);
@@ -128,6 +134,9 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   };
   const closeDeleteBoardModal = () => setIsDeleteBoardModalOpen(false);
 
+  const openAddColumnModal = () => setIsAddColumnModalOpen(true);
+  const closeAddColumnModal = () => setIsAddColumnModalOpen(false);
+
   const updateSelectedTask = (task: Task) => {
     setSelectedTask(task);
   };
@@ -141,7 +150,8 @@ export function ModalProvider({ children }: { children: ReactNode }) {
       isEditTaskModalOpen ||
       isDeleteTaskModalOpen ||
       isAddBoardModalOpen ||
-      isDeleteBoardModalOpen;
+      isDeleteBoardModalOpen ||
+      isAddColumnModalOpen;
 
     const body = document.body;
     if (isAnyModalOpen) {
@@ -168,6 +178,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
     isDeleteTaskModalOpen,
     isAddBoardModalOpen,
     isDeleteBoardModalOpen,
+    isAddColumnModalOpen,
   ]);
 
   return (
@@ -198,6 +209,9 @@ export function ModalProvider({ children }: { children: ReactNode }) {
         openDeleteBoardModal,
         closeDeleteBoardModal,
         selectedBoard,
+        isAddColumnModalOpen,
+        openAddColumnModal,
+        closeAddColumnModal,
       }}
     >
       {children}

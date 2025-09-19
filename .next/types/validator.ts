@@ -65,6 +65,12 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   handler satisfies RouteHandlerConfig<"/api/boards">
 }
 
+// Validate ../../src/app/api/columns/route.ts
+{
+  const handler = {} as typeof import("../../src/app/api/columns/route.js")
+  handler satisfies RouteHandlerConfig<"/api/columns">
+}
+
 // Validate ../../src/app/api/subtasks/[id]/route.ts
 {
   const handler = {} as typeof import("../../src/app/api/subtasks/[id]/route.js")
