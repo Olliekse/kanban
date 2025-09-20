@@ -2,6 +2,10 @@
 
 A comprehensive kanban board application built with modern web technologies. This project demonstrates full-stack development skills using Next.js, React, TypeScript, and Supabase.
 
+## Live site
+
+https://kanban-steel-iota.vercel.app/
+
 ## Learning Objectives
 
 This project is designed to help junior developers understand:
