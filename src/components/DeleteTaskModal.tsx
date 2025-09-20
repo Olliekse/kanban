@@ -32,8 +32,8 @@ export default function DeleteTaskModal() {
           Delete this task?
         </h2>
         <p className="text-[13px] leading-[23px] font-medium text-[#828FA3] md:text-[14px] md:leading-[24px]">
-          Are you sure you want to delete the '{selectedTask.title}' task and
-          its subtasks? This action cannot be reversed.
+          Are you sure you want to delete the &apos;{selectedTask.title}&apos;
+          task and its subtasks? This action cannot be reversed.
         </p>
         <div className="mt-6 flex flex-col gap-3 md:mt-8 md:flex-row md:gap-4">
           <button

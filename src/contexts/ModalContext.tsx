@@ -1,3 +1,20 @@
+/**
+ * Modal Context Provider
+ *
+ * This context manages all modal-related state and operations in our kanban application.
+ * It handles:
+ * 1. Opening and closing various modals
+ * 2. Managing selected items (tasks, boards) for modals
+ * 3. Preventing background scroll when modals are open
+ * 4. Centralized modal state management
+ *
+ * Key Features:
+ * - Multiple modal types (task, board, column management)
+ * - Selected item tracking for edit/delete operations
+ * - Background scroll prevention
+ * - Clean modal state management
+ */
+
 "use client";
 import {
   createContext,
@@ -7,86 +24,125 @@ import {
   type ReactNode,
 } from "react";
 
+/**
+ * Subtask Interface
+ *
+ * Represents a smaller task within a main task.
+ */
 interface Subtask {
-  id: string;
-  title: string;
-  completed: boolean;
-  task_id: string;
+  id: string; // Unique identifier
+  title: string; // Subtask description
+  completed: boolean; // Completion status
+  task_id: string; // Parent task ID
 }
 
+/**
+ * Task Interface
+ *
+ * Represents a task in our kanban board with all its properties
+ * and associated subtasks.
+ */
 interface Task {
-  id: string;
-  title: string;
-  description?: string;
-  column_id: string;
-  board_id: string;
-  created_at: string;
-  updated_at: string;
-  created_by_id: string;
-  subtasks: Subtask[];
+  id: string; // Unique identifier
+  title: string; // Task title
+  description?: string; // Optional description
+  column_id: string; // Which column the task belongs to
+  board_id: string; // Which board the task belongs to
+  created_at: string; // Creation timestamp
+  updated_at: string; // Last update timestamp
+  created_by_id: string; // User who created the task
+  subtasks: Subtask[]; // Array of subtasks
 }
 
+/**
+ * Board Column Interface
+ *
+ * Represents a column within a board (e.g., "To Do", "In Progress", "Done").
+ */
 interface BoardColumn {
-  id: string;
-  name: string;
-  board_id: string;
-  created_at: string;
+  id: string; // Unique identifier
+  name: string; // Column name
+  board_id: string; // Parent board ID
+  created_at: string; // Creation timestamp
 }
 
+/**
+ * Board Interface
+ *
+ * Represents a complete kanban board with its columns.
+ */
 interface Board {
-  id: string;
-  name: string;
-  created_at: string;
-  updated_at: string;
-  board_columns: BoardColumn[];
+  id: string; // Unique identifier
+  name: string; // Board name
+  created_at: string; // Creation timestamp
+  updated_at: string; // Last update timestamp
+  board_columns: BoardColumn[]; // Array of columns in this board
 }
 
+/**
+ * Modal Context Type
+ *
+ * Defines the shape of the context value that will be provided
+ * to all consuming components. This includes all modal states
+ * and functions to control them.
+ */
 interface ModalContextType {
-  isTasksModalOpen: boolean;
+  // Task-related modals
+  isTasksModalOpen: boolean; // Add new task modal
   openTasksModal: () => void;
   closeTasksModal: () => void;
 
-  isBoardsModalOpen: boolean;
+  // Board navigation modal
+  isBoardsModalOpen: boolean; // Board selection sidebar
   openBoardsModal: () => void;
   closeBoardsModal: () => void;
   toggleBoardsModal: () => void;
 
-  isTaskDetailsModalOpen: boolean;
+  // Task details modal
+  isTaskDetailsModalOpen: boolean; // View task details
   openTaskDetailsModal: (task: Task) => void;
   closeTaskDetailsModal: () => void;
 
-  // Edit Task modal
-  isEditTaskModalOpen: boolean;
+  // Edit task modal
+  isEditTaskModalOpen: boolean; // Edit existing task
   openEditTaskModal: (task: Task) => void;
   closeEditTaskModal: () => void;
-  selectedTask: Task | null;
+  selectedTask: Task | null; // Currently selected task for editing
   updateSelectedTask: (task: Task) => void;
 
-  // Delete Task modal
-  isDeleteTaskModalOpen: boolean;
+  // Delete task modal
+  isDeleteTaskModalOpen: boolean; // Delete task confirmation
   openDeleteTaskModal: (task: Task) => void;
   closeDeleteTaskModal: () => void;
 
-  // Add Board modal
-  isAddBoardModalOpen: boolean;
+  // Add board modal
+  isAddBoardModalOpen: boolean; // Create new board
   openAddBoardModal: () => void;
   closeAddBoardModal: () => void;
 
-  // Delete Board modal
-  isDeleteBoardModalOpen: boolean;
+  // Delete board modal
+  isDeleteBoardModalOpen: boolean; // Delete board confirmation
   openDeleteBoardModal: (board: Board) => void;
   closeDeleteBoardModal: () => void;
-  selectedBoard: Board | null;
+  selectedBoard: Board | null; // Currently selected board for deletion
 
-  // Add Column modal
-  isAddColumnModalOpen: boolean;
+  // Add column modal
+  isAddColumnModalOpen: boolean; // Add new column to board
   openAddColumnModal: () => void;
   closeAddColumnModal: () => void;
 }
 
+// Create the context with undefined as default value
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
+/**
+ * Modal Provider Component
+ *
+ * This component provides modal-related state and functions to all child components.
+ * It manages all modal states and prevents background scrolling when modals are open.
+ */
 export function ModalProvider({ children }: { children: ReactNode }) {
+  // Modal state management - each modal has its own boolean state
   const [isTasksModalOpen, setIsTasksModalOpen] = useState(false);
   const [isBoardsModalOpen, setIsBoardsModalOpen] = useState(false);
   const [isTaskDetailsModalOpen, setIsTaskDetailsModalOpen] = useState(false);
@@ -98,19 +154,23 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   const [selectedBoard, setSelectedBoard] = useState<Board | null>(null);
   const [isAddColumnModalOpen, setIsAddColumnModalOpen] = useState(false);
 
+  // Task modal functions
   const openTasksModal = () => setIsTasksModalOpen(true);
   const closeTasksModal = () => setIsTasksModalOpen(false);
 
+  // Task details modal functions
   const openTaskDetailsModal = (task: Task) => {
     setSelectedTask(task);
     setIsTaskDetailsModalOpen(true);
   };
   const closeTaskDetailsModal = () => setIsTaskDetailsModalOpen(false);
 
+  // Board modal functions
   const openBoardsModal = () => setIsBoardsModalOpen(true);
   const closeBoardsModal = () => setIsBoardsModalOpen(false);
   const toggleBoardsModal = () => setIsBoardsModalOpen(!isBoardsModalOpen);
 
+  // Edit task modal functions
   const openEditTaskModal = (task: Task) => {
     setSelectedTask(task);
     setIsEditTaskModalOpen(true);
@@ -119,29 +179,41 @@ export function ModalProvider({ children }: { children: ReactNode }) {
     setIsEditTaskModalOpen(false);
   };
 
+  // Delete task modal functions
   const openDeleteTaskModal = (task: Task) => {
     setSelectedTask(task);
     setIsDeleteTaskModalOpen(true);
   };
   const closeDeleteTaskModal = () => setIsDeleteTaskModalOpen(false);
 
+  // Add board modal functions
   const openAddBoardModal = () => setIsAddBoardModalOpen(true);
   const closeAddBoardModal = () => setIsAddBoardModalOpen(false);
 
+  // Delete board modal functions
   const openDeleteBoardModal = (board: Board) => {
     setSelectedBoard(board);
     setIsDeleteBoardModalOpen(true);
   };
   const closeDeleteBoardModal = () => setIsDeleteBoardModalOpen(false);
 
+  // Add column modal functions
   const openAddColumnModal = () => setIsAddColumnModalOpen(true);
   const closeAddColumnModal = () => setIsAddColumnModalOpen(false);
 
+  // Update selected task (used when task is modified)
   const updateSelectedTask = (task: Task) => {
     setSelectedTask(task);
   };
 
-  // Prevent background scroll when any modal is open
+  /**
+   * Prevent background scroll when any modal is open
+   *
+   * This effect runs whenever any modal state changes. It:
+   * 1. Adds overflow-hidden to the body to prevent scrolling
+   * 2. Compensates for the scrollbar width to prevent layout shift
+   * 3. Cleans up when the component unmounts
+   */
   useEffect(() => {
     const isAnyModalOpen =
       isTasksModalOpen ||
@@ -155,6 +227,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
 
     const body = document.body;
     if (isAnyModalOpen) {
+      // Calculate scrollbar width to prevent layout shift
       const scrollBarWidth =
         window.innerWidth - document.documentElement.clientWidth;
       body.classList.add("overflow-hidden");
@@ -166,6 +239,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
       body.style.paddingRight = "";
     }
 
+    // Cleanup function to ensure we don't leave the body in a bad state
     return () => {
       body.classList.remove("overflow-hidden");
       body.style.paddingRight = "";
@@ -181,6 +255,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
     isAddColumnModalOpen,
   ]);
 
+  // Provide the context value to all child components
   return (
     <ModalContext.Provider
       value={{
@@ -219,6 +294,15 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Custom hook to use the Modal context
+ *
+ * This hook provides easy access to the modal context. It includes
+ * error handling to ensure the hook is only used within a ModalProvider.
+ *
+ * @returns The modal context value
+ * @throws Error if used outside of ModalProvider
+ */
 export function useModal() {
   const context = useContext(ModalContext);
   if (!context) throw new Error("useModal must be used within ModalProvider");

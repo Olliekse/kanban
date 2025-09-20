@@ -1,56 +1,243 @@
+/**
+ * Add Task Modal Component
+ *
+ * This modal component allows users to create new tasks in the kanban board.
+ * It provides a comprehensive form with validation, subtask management, and
+ * column selection functionality.
+ *
+ * Key Features:
+ * - Form validation with error handling
+ * - Dynamic subtask management (add/remove)
+ * - Column selection dropdown
+ * - Loading states and user feedback
+ * - Keyboard navigation support
+ * - Click-outside-to-close functionality
+ *
+ * Form Fields:
+ * - Task title (required)
+ * - Task description (optional)
+ * - Column selection (required)
+ * - Multiple subtasks (at least one required)
+ */
+
 "use client";
 
 import { useModal } from "@/contexts/ModalContext";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTasks } from "@/contexts/TasksContext";
 import { useBoards } from "@/contexts/BoardsContext";
+import { z } from "zod";
 
+/**
+ * Task Interface
+ *
+ * Defines the structure of a task object with all its properties
+ * and associated subtasks.
+ */
 interface Task {
-  id: string;
-  title: string;
-  description?: string;
-  column_id: string;
-  board_id: string;
-  created_at: string;
-  updated_at: string;
-  created_by_id: string;
-  subtasks: Subtask[];
+  id: string; // Unique identifier
+  title: string; // Task title
+  description?: string; // Optional description
+  column_id: string; // Which column the task belongs to
+  board_id: string; // Which board the task belongs to
+  created_at: string; // Creation timestamp
+  updated_at: string; // Last update timestamp
+  created_by_id: string; // User who created the task
+  subtasks: Subtask[]; // Array of subtasks
 }
 
+/**
+ * Subtask Interface
+ *
+ * Defines the structure of a subtask object.
+ */
 interface Subtask {
-  id: string;
-  title: string;
-  completed: boolean;
-  task_id: string;
+  id: string; // Unique identifier
+  title: string; // Subtask description
+  completed: boolean; // Completion status
+  task_id: string; // Parent task ID
 }
 
-export default function AddTaskModal() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [columnId, setColumnId] = useState("");
-  const [subtasks, setSubtasks] = useState([{ title: "" }]);
-  const [isLoading, setIsLoading] = useState(false);
+/**
+ * Validation Schema
+ *
+ * Uses Zod for runtime validation of form data.
+ * Ensures that:
+ * - Task title is not empty
+ * - At least one subtask is provided
+ * - Each subtask has a non-empty title
+ */
+const taskSchema = z.object({
+  title: z.string().min(1, "Task title is required"),
+  subtasks: z
+    .array(
+      z.object({
+        title: z.string().min(1, "Subtask title is required"),
+      }),
+    )
+    .min(1, "At least one subtask is required"),
+});
 
+/**
+ * Add Task Modal Component
+ *
+ * This component renders a modal form for creating new tasks.
+ * It manages form state, validation, and submission to the API.
+ */
+export default function AddTaskModal() {
+  // Form state management
+  const [title, setTitle] = useState(""); // Task title
+  const [description, setDescription] = useState(""); // Task description
+  const [columnId, setColumnId] = useState(""); // Selected column ID
+  const [subtasks, setSubtasks] = useState([{ title: "" }]); // Subtasks array
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [errors, setErrors] = useState<{
+    // Validation errors
+    title?: string;
+    subtasks?: { [key: number]: string };
+  }>({});
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Dropdown state
+  const dropdownRef = useRef<HTMLDivElement>(null); // Ref for dropdown
+
+  // Context hooks for accessing shared state and functions
   const { openTasksModal, closeTasksModal } = useModal();
   const { refreshTasks } = useTasks();
   const { currentBoard } = useBoards();
 
+  /**
+   * Set default column to "Todo" if it exists
+   *
+   * This effect runs when the current board changes and automatically
+   * selects the "Todo" column if it exists, providing a better UX.
+   */
+  useEffect(() => {
+    if (currentBoard?.board_columns && currentBoard.board_columns.length > 0) {
+      const todoColumn = currentBoard.board_columns.find(
+        (column) => column.name.toLowerCase() === "todo",
+      );
+      if (todoColumn && !columnId) {
+        setColumnId(todoColumn.id);
+      }
+    }
+  }, [currentBoard, columnId]);
+
+  /**
+   * Close dropdown when clicking outside
+   *
+   * This effect adds a click listener to detect clicks outside the dropdown
+   * and closes it automatically for better UX.
+   */
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  /**
+   * Add a new subtask to the form
+   *
+   * Adds an empty subtask object to the subtasks array,
+   * allowing users to create multiple subtasks for a task.
+   */
   const addSubtask = () => {
     setSubtasks([...subtasks, { title: "" }]);
   };
 
+  /**
+   * Remove a subtask from the form
+   *
+   * @param index - The index of the subtask to remove
+   */
   const removeSubtask = (index: number) => {
     setSubtasks(subtasks.filter((_, i) => i !== index));
   };
 
+  /**
+   * Update a subtask's title
+   *
+   * @param index - The index of the subtask to update
+   * @param title - The new title for the subtask
+   */
   const updateSubtask = (index: number, title: string) => {
     const newSubtasks = [...subtasks];
     newSubtasks[index] = { title };
     setSubtasks(newSubtasks);
   };
 
+  /**
+   * Handle column selection from dropdown
+   *
+   * @param columnId - The ID of the selected column
+   */
+  const handleColumnSelect = (columnId: string) => {
+    setColumnId(columnId);
+    setIsDropdownOpen(false);
+  };
+
+  /**
+   * Get the display name of the selected column
+   *
+   * @returns The name of the selected column or a default message
+   */
+  const getSelectedColumnName = () => {
+    const selectedColumn = currentBoard?.board_columns?.find(
+      (col) => col.id === columnId,
+    );
+    return selectedColumn?.name || "Select a column";
+  };
+
+  /**
+   * Handle form submission
+   *
+   * This function validates the form data and submits it to the API.
+   * It includes comprehensive validation and error handling.
+   *
+   * @param e - The form submit event
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Clear previous errors
+    setErrors({});
+
+    // Manual validation for better error messages
+    const fieldErrors: {
+      title?: string;
+      subtasks?: { [key: number]: string };
+    } = {};
+
+    // Validate title
+    if (title.trim() === "") {
+      fieldErrors.title = "Task title is required";
+    }
+
+    // Validate subtasks - check for empty ones
+    subtasks.forEach((subtask, index) => {
+      if (subtask.title.trim() === "") {
+        if (!fieldErrors.subtasks) {
+          fieldErrors.subtasks = {};
+        }
+        fieldErrors.subtasks[index] = "Can't be empty";
+      }
+    });
+
+    // If there are errors, show them and stop
+    if (fieldErrors.title || fieldErrors.subtasks) {
+      setErrors(fieldErrors);
+      return;
+    }
+
+    // If we get here, validation passed!
     setIsLoading(true);
 
     try {
@@ -116,20 +303,28 @@ export default function AddTaskModal() {
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50">
-      <div className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white p-6">
+      <div className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white p-6 md:max-w-[480px]">
         <h2 className="pb-6 text-lg font-bold">Add New Task</h2>
         <form onSubmit={handleSubmit} className="flex flex-col">
           <label className="text-3 text-light-text-secondary pb-2 font-bold">
             Title
           </label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="placeholder:text-dark-bg/25 w-full rounded border border-gray-300 px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
-            placeholder="e.g. Take coffee break"
-            required
-          />
+          <div className="flex flex-col">
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className={`placeholder:text-dark-bg/25 w-full rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium ${
+                errors.title ? "border-red-500" : "border-gray-300"
+              }`}
+              placeholder="e.g. Take coffee break"
+            />
+            {errors.title && (
+              <p className="mt-1 text-sm font-medium text-red-500">
+                {errors.title}
+              </p>
+            )}
+          </div>
 
           <label className="text-3 text-light-text-secondary pt-6 pb-2 font-bold">
             Description
@@ -145,21 +340,34 @@ export default function AddTaskModal() {
             Subtasks
           </label>
           {subtasks.map((subtask, index) => (
-            <div key={index} className="mb-3 flex justify-between">
-              <input
-                type="text"
-                value={subtask.title}
-                onChange={(e) => updateSubtask(index, e.target.value)}
-                className="placeholder:text-dark-bg/25 w-full rounded border border-gray-300 px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
-                placeholder="e.g. Make coffee"
-              />
-              <button
-                type="button"
-                onClick={() => removeSubtask(index)}
-                className="ml-4 text-red-500 hover:text-red-700"
-              >
-                ✕
-              </button>
+            <div key={index} className="mb-3">
+              <div className="flex items-center justify-between">
+                <div className="relative flex-1">
+                  <input
+                    type="text"
+                    value={subtask.title}
+                    onChange={(e) => updateSubtask(index, e.target.value)}
+                    className={`placeholder:text-dark-bg/25 w-full rounded border px-4 py-2 pr-24 placeholder:text-[13px] placeholder:font-medium ${
+                      errors.subtasks?.[index]
+                        ? "border-red-500"
+                        : "border-gray-300"
+                    }`}
+                    placeholder="e.g. Make coffee"
+                  />
+                  {errors.subtasks?.[index] && (
+                    <span className="absolute top-1/2 right-2 -translate-y-1/2 transform text-sm font-medium text-red-500">
+                      Can&apos;t be empty
+                    </span>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeSubtask(index)}
+                  className="ml-4 text-red-500 hover:text-red-700"
+                >
+                  ✕
+                </button>
+              </div>
             </div>
           ))}
 
@@ -174,19 +382,49 @@ export default function AddTaskModal() {
           <label className="text-3 text-light-text-secondary pb-2 font-bold">
             Status
           </label>
-          <select
-            value={columnId}
-            onChange={(e) => setColumnId(e.target.value)}
-            className="border-light-text-secondary/25 mb-6 w-full cursor-pointer appearance-none rounded border bg-white px-4 py-2"
-            required
-          >
-            <option value="">Select a column</option>
-            {currentBoard?.board_columns?.map((column) => (
-              <option key={column.id} value={column.id}>
-                {column.name}
-              </option>
-            )) || []}
-          </select>
+          <div className="relative mb-6" ref={dropdownRef}>
+            {/* Custom dropdown button */}
+            <button
+              type="button"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="w-full cursor-pointer rounded-xl border border-gray-200 bg-white px-4 py-3 pr-10 text-left text-black focus:outline-none"
+            >
+              {getSelectedColumnName()}
+            </button>
+
+            {/* Dropdown arrow icon */}
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+              <svg
+                className={`h-4 w-4 text-gray-400 transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
+
+            {/* Custom dropdown menu */}
+            {isDropdownOpen && (
+              <div className="absolute top-full right-0 left-0 z-10 mt-1 rounded-xl border border-gray-200 bg-white shadow-lg">
+                {currentBoard?.board_columns?.map((column) => (
+                  <button
+                    key={column.id}
+                    type="button"
+                    onClick={() => handleColumnSelect(column.id)}
+                    className="w-full px-4 py-3 text-left text-gray-400 first:rounded-t-xl last:rounded-b-xl hover:bg-gray-50"
+                  >
+                    {column.name}
+                  </button>
+                )) || []}
+              </div>
+            )}
+          </div>
 
           <button
             type="submit"

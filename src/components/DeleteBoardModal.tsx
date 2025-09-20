@@ -21,7 +21,7 @@ export default function DeleteBoardModal() {
         const remainingBoards = boards.filter(
           (board) => board.id !== selectedBoard.id,
         );
-        setCurrentBoard(remainingBoards[0]);
+        setCurrentBoard(remainingBoards[0] || null);
       } else {
         setCurrentBoard(null);
       }
@@ -41,8 +41,9 @@ export default function DeleteBoardModal() {
           Delete this board?
         </h2>
         <p className="text-[13px] leading-[23px] font-medium text-[#828FA3] md:text-[14px] md:leading-[24px]">
-          Are you sure you want to delete the '{selectedBoard.name}' board? This
-          action will remove all columns and tasks and cannot be reversed.
+          Are you sure you want to delete the &apos;{selectedBoard.name}&apos;
+          board? This action will remove all columns and tasks and cannot be
+          reversed.
         </p>
         <div className="mt-6 flex flex-col gap-3 md:mt-8 md:flex-row md:gap-4">
           <button

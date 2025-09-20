@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useModal } from "@/contexts/ModalContext";
 import { useTasks } from "@/contexts/TasksContext";
 import { useBoards } from "@/contexts/BoardsContext";
@@ -21,6 +21,8 @@ export default function EditTaskModal() {
   const [columnId, setColumnId] = useState("");
   const [subtasks, setSubtasks] = useState<SubtaskFormValue[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Hydrate form with selected task
   useEffect(() => {
@@ -37,6 +39,23 @@ export default function EditTaskModal() {
     );
   }, [selectedTask]);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const addSubtask = () => setSubtasks((prev) => [...prev, { title: "" }]);
   const removeSubtask = (index: number) =>
     setSubtasks((prev) => prev.filter((_, i) => i !== index));
@@ -44,6 +63,18 @@ export default function EditTaskModal() {
     setSubtasks((prev) =>
       prev.map((s, i) => (i === index ? { ...s, title } : s)),
     );
+
+  const handleColumnSelect = (columnId: string) => {
+    setColumnId(columnId);
+    setIsDropdownOpen(false);
+  };
+
+  const getSelectedColumnName = () => {
+    const selectedColumn = currentBoard?.board_columns?.find(
+      (col) => col.id === columnId,
+    );
+    return selectedColumn?.name || "Select a column";
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,7 +124,7 @@ export default function EditTaskModal() {
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50">
-      <div className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white p-6">
+      <div className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white p-6 md:max-w-[480px]">
         <h2 className="pb-6 text-lg font-bold">Edit Task</h2>
         <form onSubmit={handleSubmit} className="flex flex-col">
           <label className="text-3 text-light-text-secondary pb-2 font-bold">
@@ -154,19 +185,53 @@ export default function EditTaskModal() {
           <label className="text-3 text-light-text-secondary pb-2 font-bold">
             Status
           </label>
-          <select
-            value={columnId}
-            onChange={(e) => setColumnId(e.target.value)}
-            className="border-light-text-secondary/25 mb-6 w-full cursor-pointer appearance-none rounded border bg-white px-4 py-2"
-            required
-          >
-            <option value="">Select a column</option>
-            {currentBoard?.board_columns?.map((column) => (
-              <option key={column.id} value={column.id}>
-                {column.name}
-              </option>
-            )) || []}
-          </select>
+          <div className="relative mb-6" ref={dropdownRef}>
+            {/* Custom dropdown button */}
+            <button
+              type="button"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="w-full cursor-pointer rounded-xl border border-gray-200 bg-white px-4 py-3 pr-10 text-left text-gray-500 focus:outline-none"
+            >
+              {getSelectedColumnName()}
+            </button>
+
+            {/* Dropdown arrow icon */}
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+              <svg
+                className={`h-4 w-4 text-gray-400 transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
+
+            {/* Custom dropdown menu */}
+            {isDropdownOpen && (
+              <div className="absolute top-full right-0 left-0 z-10 mt-1 rounded-xl border border-gray-200 bg-white shadow-lg">
+                {currentBoard?.board_columns?.map((column) => (
+                  <button
+                    key={column.id}
+                    type="button"
+                    onClick={() => handleColumnSelect(column.id)}
+                    className={`w-full px-4 py-3 text-left first:rounded-t-xl last:rounded-b-xl hover:bg-gray-50 ${
+                      columnId === column.id
+                        ? "font-medium text-black"
+                        : "text-gray-400"
+                    }`}
+                  >
+                    {column.name}
+                  </button>
+                )) || []}
+              </div>
+            )}
+          </div>
 
           <button
             type="submit"
