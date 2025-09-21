@@ -67,6 +67,11 @@ interface BoardsContextType {
   setCurrentBoard: (board: Board | null) => void; // Function to change current board
   refreshBoards: () => Promise<void>; // Function to refresh boards
   createBoard: (name: string, columns: { name: string }[]) => Promise<Board>; // Create new board
+  updateBoard: (
+    boardId: string,
+    name: string,
+    columns: { name: string }[],
+  ) => Promise<Board>; // Update existing board
   createColumn: (name: string, boardId: string) => Promise<BoardColumn>; // Create new column
 }
 
@@ -171,6 +176,55 @@ export function BoardsProvider({ children }: { children: ReactNode }) {
   };
 
   /**
+   * Update an existing board
+   *
+   * This function updates a board's name and columns.
+   * It updates both the current board state and the boards list.
+   *
+   * @param boardId - The ID of the board to update
+   * @param name - The new name of the board
+   * @param columns - Array of column names to update
+   * @returns Promise that resolves to the updated board
+   */
+  const updateBoard = async (
+    boardId: string,
+    name: string,
+    columns: { name: string }[],
+  ): Promise<Board> => {
+    try {
+      const response = await fetch(`/api/boards/${boardId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, columns }),
+      });
+
+      if (!response.ok) {
+        const errorData = (await response.json()) as { error?: string };
+        throw new Error(errorData.error ?? "Failed to update board");
+      }
+
+      const updatedBoard = await response.json();
+
+      // Update the boards list
+      setBoards((prev) =>
+        prev.map((board) => (board.id === boardId ? updatedBoard : board)),
+      );
+
+      // Update current board if it's the one being edited
+      if (currentBoard && currentBoard.id === boardId) {
+        setCurrentBoard(updatedBoard);
+      }
+
+      return updatedBoard;
+    } catch (err) {
+      console.error("Error updating board:", err);
+      throw err;
+    }
+  };
+
+  /**
    * Create a new column in a board
    *
    * This function adds a new column to an existing board.
@@ -237,6 +291,7 @@ export function BoardsProvider({ children }: { children: ReactNode }) {
         setCurrentBoard,
         refreshBoards,
         createBoard,
+        updateBoard,
         createColumn,
       }}
     >

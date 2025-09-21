@@ -82,8 +82,8 @@ export default function EditTaskModal() {
     setIsLoading(true);
 
     try {
-      // Update core task fields
-      const response = await fetch(`/api/tasks/${selectedTask.id}`, {
+      // Update core task fields first
+      const taskResponse = await fetch(`/api/tasks/${selectedTask.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -93,13 +93,29 @@ export default function EditTaskModal() {
         }),
       });
 
-      if (!response.ok) {
-        const errorData = (await response.json()) as { error?: string };
+      if (!taskResponse.ok) {
+        const errorData = (await taskResponse.json()) as { error?: string };
         throw new Error(errorData.error ?? "Failed to update task");
       }
 
-      // Note: For simplicity, subtasks editing (create/update/delete) is not
-      // implemented in the API yet. We keep the UI parity for now.
+      // Then update subtasks using the batch endpoint
+      const subtasksResponse = await fetch(`/api/subtasks/batch`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          taskId: selectedTask.id,
+          subtasks: subtasks.map((subtask) => ({
+            title: subtask.title,
+            completed: subtask.completed ?? false,
+            task_id: selectedTask.id,
+          })),
+        }),
+      });
+
+      if (!subtasksResponse.ok) {
+        const errorData = (await subtasksResponse.json()) as { error?: string };
+        throw new Error(errorData.error ?? "Failed to update subtasks");
+      }
 
       await refreshTasks(currentBoard?.id);
       closeEditTaskModal();

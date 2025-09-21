@@ -38,6 +38,7 @@ function Header() {
     isBoardsModalOpen, // Whether the boards modal is open
     toggleBoardsModal, // Function to toggle the boards modal
     openDeleteBoardModal, // Function to open the delete board modal
+    openEditBoardModal, // Function to open the edit board modal
   } = useModal();
   const { tasks } = useTasks(); // Current tasks for button state
   const { currentBoard } = useBoards(); // Currently selected board
@@ -68,6 +69,18 @@ function Header() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  /**
+   * Handle board editing
+   *
+   * Opens the edit board modal for the current board and closes the dropdown.
+   */
+  const handleEditBoard = () => {
+    if (currentBoard) {
+      openEditBoardModal(currentBoard);
+      setIsDropdownOpen(false);
+    }
+  };
 
   /**
    * Handle board deletion
@@ -134,14 +147,20 @@ function Header() {
               <Image
                 src="/icon-vertical-ellipsis.svg"
                 alt="3-dot menu icon"
-                width={4}
-                height={16}
+                width={5}
+                height={20}
               />
             </button>
 
             {/* Dropdown menu */}
             {isDropdownOpen && (
               <div className="absolute top-full right-0 z-50 mt-2 w-48 rounded-lg border border-gray-200 bg-white py-2 shadow-lg">
+                <button
+                  onClick={handleEditBoard}
+                  className="w-full px-4 py-2 text-left text-gray-700 transition-colors hover:bg-gray-50"
+                >
+                  Edit Board
+                </button>
                 <button
                   onClick={handleDeleteBoard}
                   className="w-full px-4 py-2 text-left text-red-600 transition-colors hover:bg-red-50"
@@ -201,7 +220,6 @@ function Header() {
               aria-label="Board options"
             >
               <Image
-                className="object-none"
                 src="/icon-vertical-ellipsis.svg"
                 alt="3-dot menu icon"
                 width={4}
@@ -212,6 +230,12 @@ function Header() {
             {/* Dropdown menu */}
             {isDropdownOpen && (
               <div className="absolute top-full right-0 z-50 mt-2 w-48 rounded-lg border border-gray-200 bg-white py-2 shadow-lg">
+                <button
+                  onClick={handleEditBoard}
+                  className="w-full px-4 py-2 text-left text-gray-700 transition-colors hover:bg-gray-50"
+                >
+                  Edit Board
+                </button>
                 <button
                   onClick={handleDeleteBoard}
                   className="w-full px-4 py-2 text-left text-red-600 transition-colors hover:bg-red-50"

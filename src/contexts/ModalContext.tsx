@@ -120,6 +120,12 @@ interface ModalContextType {
   openAddBoardModal: () => void;
   closeAddBoardModal: () => void;
 
+  // Edit board modal
+  isEditBoardModalOpen: boolean; // Edit existing board
+  openEditBoardModal: (board: Board) => void;
+  closeEditBoardModal: () => void;
+  selectedBoardForEdit: Board | null; // Currently selected board for editing
+
   // Delete board modal
   isDeleteBoardModalOpen: boolean; // Delete board confirmation
   openDeleteBoardModal: (board: Board) => void;
@@ -150,6 +156,9 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isDeleteTaskModalOpen, setIsDeleteTaskModalOpen] = useState(false);
   const [isAddBoardModalOpen, setIsAddBoardModalOpen] = useState(false);
+  const [isEditBoardModalOpen, setIsEditBoardModalOpen] = useState(false);
+  const [selectedBoardForEdit, setSelectedBoardForEdit] =
+    useState<Board | null>(null);
   const [isDeleteBoardModalOpen, setIsDeleteBoardModalOpen] = useState(false);
   const [selectedBoard, setSelectedBoard] = useState<Board | null>(null);
   const [isAddColumnModalOpen, setIsAddColumnModalOpen] = useState(false);
@@ -190,6 +199,16 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   const openAddBoardModal = () => setIsAddBoardModalOpen(true);
   const closeAddBoardModal = () => setIsAddBoardModalOpen(false);
 
+  // Edit board modal functions
+  const openEditBoardModal = (board: Board) => {
+    setSelectedBoardForEdit(board);
+    setIsEditBoardModalOpen(true);
+  };
+  const closeEditBoardModal = () => {
+    setIsEditBoardModalOpen(false);
+    setSelectedBoardForEdit(null);
+  };
+
   // Delete board modal functions
   const openDeleteBoardModal = (board: Board) => {
     setSelectedBoard(board);
@@ -222,6 +241,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
       isEditTaskModalOpen ||
       isDeleteTaskModalOpen ||
       isAddBoardModalOpen ||
+      isEditBoardModalOpen ||
       isDeleteBoardModalOpen ||
       isAddColumnModalOpen;
 
@@ -251,6 +271,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
     isEditTaskModalOpen,
     isDeleteTaskModalOpen,
     isAddBoardModalOpen,
+    isEditBoardModalOpen,
     isDeleteBoardModalOpen,
     isAddColumnModalOpen,
   ]);
@@ -280,6 +301,10 @@ export function ModalProvider({ children }: { children: ReactNode }) {
         isAddBoardModalOpen,
         openAddBoardModal,
         closeAddBoardModal,
+        isEditBoardModalOpen,
+        openEditBoardModal,
+        closeEditBoardModal,
+        selectedBoardForEdit,
         isDeleteBoardModalOpen,
         openDeleteBoardModal,
         closeDeleteBoardModal,

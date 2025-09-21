@@ -77,6 +77,12 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   handler satisfies RouteHandlerConfig<"/api/subtasks/[id]">
 }
 
+// Validate ../../src/app/api/subtasks/batch/route.ts
+{
+  const handler = {} as typeof import("../../src/app/api/subtasks/batch/route.js")
+  handler satisfies RouteHandlerConfig<"/api/subtasks/batch">
+}
+
 // Validate ../../src/app/api/tasks/[id]/route.ts
 {
   const handler = {} as typeof import("../../src/app/api/tasks/[id]/route.js")

@@ -28,6 +28,7 @@ import EditTaskModal from "@/components/EditTaskModal";
 import DeleteTaskModal from "@/components/DeleteTaskModal";
 import DeleteBoardModal from "@/components/DeleteBoardModal";
 import AddBoardModal from "@/components/AddBoardModal";
+import EditBoardModal from "@/components/EditBoardModal";
 import AddColumnModal from "@/components/AddColumnModal";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
@@ -47,6 +48,7 @@ export default function Home() {
     isDeleteTaskModalOpen,
     isDeleteBoardModalOpen,
     isAddBoardModalOpen,
+    isEditBoardModalOpen,
     isAddColumnModalOpen,
     openAddColumnModal,
   } = useModal();
@@ -97,6 +99,7 @@ export default function Home() {
         */}
         {isBoardsModalOpen && <BoardsModal />}
         {isAddBoardModalOpen && <AddBoardModal />}
+        {isEditBoardModalOpen && <EditBoardModal />}
         {isAddColumnModalOpen && <AddColumnModal />}
         {isTasksModalOpen && <TaskModal />}
         {isTaskDetailsModalOpen && <TaskDetailsModal />}
@@ -281,6 +284,7 @@ export default function Home() {
         {isDeleteTaskModalOpen && <DeleteTaskModal />}
         {isDeleteBoardModalOpen && <DeleteBoardModal />}
         {isAddBoardModalOpen && <AddBoardModal />}
+        {isEditBoardModalOpen && <EditBoardModal />}
         {isAddColumnModalOpen && <AddColumnModal />}
       </div>
     </DragDropContext>

@@ -4,7 +4,7 @@ A comprehensive kanban board application built with modern web technologies. Thi
 
 ## Live site
 
-https://kanban-steel-iota.vercel.app/
+[Live Demo](https://kanban-steel-iota.vercel.app/)
 
 ## Learning Objectives
 
@@ -22,11 +22,12 @@ This project is designed to help junior developers understand:
 
 ## Features
 
-- **Multi-board support** - Create and manage multiple kanban boards
+- **Multi-board support** - Create, edit, and manage multiple kanban boards
+- **Board customization** - Edit board names and reorganize columns at any time
 - **Drag and drop** - Move tasks between columns with smooth animations
 - **Task management** - Create, edit, and delete tasks with descriptions
 - **Subtask support** - Break down tasks into smaller, manageable pieces
-- **Column management** - Add new columns to organize your workflow
+- **Column management** - Add, edit, or remove columns to organize your workflow
 - **Dark/Light theme** - Toggle between themes with persistent preferences
 - **Responsive design** - Works seamlessly on desktop, tablet, and mobile
 - **Real-time updates** - Changes sync immediately across the interface
@@ -36,7 +37,7 @@ This project is designed to help junior developers understand:
 
 ### Frontend Architecture
 
-```
+```plaintext
 src/
 ├── app/                    # Next.js App Router
 │   ├── api/               # API routes (backend)
@@ -142,8 +143,11 @@ npm install
 
 ### 2. Set up Supabase
 
+Follow these steps to set up your Supabase backend:
+
 1. **Create a Supabase project** at [supabase.com](https://supabase.com)
-2. **Set up the database schema**:
+2. **Configure the database** by copying and running the SQL schema below
+3. **Set up credentials** as described in the next section
 
 ```sql
 -- Create tables
@@ -193,9 +197,10 @@ CREATE POLICY "Allow anonymous access to tasks" ON tasks FOR ALL USING (true);
 CREATE POLICY "Allow anonymous access to subtasks" ON subtasks FOR ALL USING (true);
 ```
 
-3. **Get your Supabase credentials**:
-   - Go to Settings → API
-   - Copy your Project URL and anon public key
+#### Getting your credentials
+
+- Go to Settings → API in your Supabase dashboard
+- Copy your Project URL and anon public key
 
 ### 3. Environment Setup
 
