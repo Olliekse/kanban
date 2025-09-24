@@ -36,6 +36,7 @@ function Header() {
   const {
     openTasksModal, // Function to open the add task modal
     isBoardsModalOpen, // Whether the boards modal is open
+    isBoardsModalEntered, // Whether the boards modal has entered (animation state)
     toggleBoardsModal, // Function to toggle the boards modal
     openDeleteBoardModal, // Function to open the delete board modal
     openEditBoardModal, // Function to open the edit board modal
@@ -100,13 +101,9 @@ function Header() {
         Mobile Header Layout
         Optimized for small screens with compact design and icon-based navigation
       */}
-      <div className="bg-theme-primary relative z-60 flex w-full items-center justify-between px-4 py-5 md:hidden">
+      <div className="bg-theme-primary relative z-60 grid w-full grid-cols-[25px_250px_1fr] items-center justify-between px-4 py-[17px] md:hidden">
         {/* Mobile logo and boards toggle */}
-        <button
-          onClick={toggleBoardsModal}
-          aria-label="Open boards"
-          className="flex items-center"
-        >
+        <button aria-label="Open boards" className="flex items-center">
           <Image
             src="/logo-mobile.svg"
             alt="header logo"
@@ -116,14 +113,21 @@ function Header() {
         </button>
 
         {/* Current board name display */}
-        <div className="flex gap-2 pl-4">
+        <div className="flex items-center gap-2 pl-4">
           <span className="text-theme-primary text-[18px] font-bold">
             {currentBoard?.name || "Select Board"}
           </span>
+          <Image
+            className="pointer-events-none mt-2 -translate-y-1/2 object-none"
+            src="/icon-chevron-down.svg"
+            width={9}
+            height={5}
+            alt="dropdown arrow"
+          />
         </div>
 
         {/* Action buttons */}
-        <div className="flex gap-4 pl-19">
+        <div className="flex items-center gap-4">
           {/* Add task button with visual feedback */}
           <button
             onClick={() => openTasksModal()}
@@ -141,14 +145,14 @@ function Header() {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-gray-100"
+              className="flex items-center justify-center rounded-lg transition-colors hover:bg-gray-100"
               aria-label="Board options"
             >
               <Image
                 src="/icon-vertical-ellipsis.svg"
                 alt="3-dot menu icon"
-                width={5}
-                height={20}
+                width={4}
+                height={16}
               />
             </button>
 
@@ -177,9 +181,9 @@ function Header() {
         Desktop Header Layout
         Full layout with text labels and larger interactive elements
       */}
-      <div className="bg-theme-primary border-theme relative z-60 hidden w-full items-center justify-between border-b px-6 py-5 md:flex">
+      <div className="bg-theme-primary border-theme relative z-40 hidden w-[full] items-center justify-between border-b px-6 md:flex">
         {/* Left section: Logo and board info */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center">
           {/* Theme-aware logo */}
           <div className="flex items-center">
             <Image
@@ -189,21 +193,22 @@ function Header() {
               height={25}
               className="cursor-pointer"
             />
+            {/* Visual separator */}
+            <div className="hidden w-[1px] bg-[#979797] opacity-20 md:ml-6 md:block md:h-[80px] lg:ml-8 lg:h-[96px]" />
           </div>
 
-          {/* Visual separator */}
-          <div className="bg-theme h-10 w-px" />
-
-          {/* Current board name */}
-          <div className="flex items-center gap-2">
-            <span className="text-theme-primary text-[20px] font-bold">
+          {/* Current board name with animated gap (sync with sidebar animation) */}
+          <div
+            className={`ml-[26px] flex items-center gap-2 transition-transform duration-300 ease-out ${isBoardsModalEntered ? "translate-x-[105px]" : "translate-x-0"}`}
+          >
+            <span className="text-theme-primary text-[20px] font-bold lg:pb-[6px] lg:pl-2 lg:text-[24px] lg:tracking-wide">
               {currentBoard?.name || "Select Board"}
             </span>
           </div>
         </div>
 
         {/* Right section: Action buttons */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-6 lg:pb-2">
           {/* Add task button with text label */}
           <button
             onClick={() => openTasksModal()}
@@ -216,14 +221,14 @@ function Header() {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-gray-100"
+              className="flex items-center justify-center rounded-lg transition-colors hover:bg-gray-100 lg:pr-2"
               aria-label="Board options"
             >
               <Image
                 src="/icon-vertical-ellipsis.svg"
                 alt="3-dot menu icon"
-                width={4}
-                height={16}
+                width={5}
+                height={20}
               />
             </button>
 

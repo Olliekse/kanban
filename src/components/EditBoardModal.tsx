@@ -80,7 +80,7 @@ export default function EditBoardModal() {
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50">
-      <div className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white p-6">
+      <div className="relative mx-4 w-full max-w-[480px] rounded-lg bg-white p-6">
         <h2 className="pb-6 text-lg font-bold text-[#000112]">Edit Board</h2>
         <form onSubmit={handleSubmit} className="flex flex-col">
           <label className="text-3 text-text-secondary pb-2 font-bold">
@@ -130,7 +130,7 @@ export default function EditBoardModal() {
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-primary mt-6 h-10 cursor-pointer rounded-3xl font-bold text-white disabled:opacity-50"
+            className="bg-primary h-10 cursor-pointer rounded-3xl font-bold text-white disabled:opacity-50"
           >
             {isLoading ? "Saving Changes..." : "Save Changes"}
           </button>

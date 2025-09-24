@@ -66,7 +66,7 @@ function TaskDetailsModal() {
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50">
-      <div className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white px-4 py-6">
+      <div className="relative mx-4 w-full max-w-[480px] rounded-lg bg-white px-4 py-6">
         <div className="flex flex-col gap-6">
           <div className="flex items-start justify-between">
             <h3 className="text-[18px] font-bold text-[#000112]">
@@ -79,6 +79,7 @@ function TaskDetailsModal() {
                 className="cursor-pointer"
               >
                 <Image
+                  className="lg:h-5 lg:w-[5px]"
                   src="/icon-vertical-ellipsis.svg"
                   alt="3-dot menu icon"
                   width={4}
@@ -104,11 +105,11 @@ function TaskDetailsModal() {
             </div>
           </div>
           {selectedTask.description && (
-            <p className="text-light-text-secondary text-[13px] leading-[23px] font-medium">
+            <p className="text-text-secondary text-[13px] leading-[23px] font-medium">
               {selectedTask.description}
             </p>
           )}
-          <span className="text-light-text-secondary text-[12px] font-bold">
+          <span className="text-text-secondary text-[12px] font-bold">
             Subtasks ({completedCount} of {totalCount})
           </span>
         </div>
@@ -133,14 +134,14 @@ function TaskDetailsModal() {
           ))}
         </div>
         <div className="flex flex-col gap-2">
-          <span className="text-light-text-secondary text-[12px] font-bold">
+          <span className="text-text-secondary text-[12px] font-bold">
             Current status
           </span>
           <div className="relative mb-6">
             <select
               value={selectedTask.column_id}
               disabled
-              className="border-light-text-secondary/25 w-full cursor-not-allowed appearance-none rounded border px-4 py-2 pr-10 opacity-80"
+              className="w-full cursor-not-allowed appearance-none rounded border border-[#828FA3]/25 px-4 py-2 pr-10 opacity-80"
             >
               {currentBoard?.board_columns?.map((column) => (
                 <option key={column.id} value={column.id}>

@@ -94,6 +94,7 @@ interface ModalContextType {
 
   // Board navigation modal
   isBoardsModalOpen: boolean; // Board selection sidebar
+  isBoardsModalEntered: boolean; // Whether the boards sidebar has finished entering (animation state)
   openBoardsModal: () => void;
   closeBoardsModal: () => void;
   toggleBoardsModal: () => void;
@@ -151,6 +152,8 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   // Modal state management - each modal has its own boolean state
   const [isTasksModalOpen, setIsTasksModalOpen] = useState(false);
   const [isBoardsModalOpen, setIsBoardsModalOpen] = useState(false);
+  // Tracks whether the boards modal has finished entering (used for animation sync)
+  const [isBoardsModalEntered, setIsBoardsModalEntered] = useState(false);
   const [isTaskDetailsModalOpen, setIsTaskDetailsModalOpen] = useState(false);
   const [isEditTaskModalOpen, setIsEditTaskModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
@@ -175,9 +178,23 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   const closeTaskDetailsModal = () => setIsTaskDetailsModalOpen(false);
 
   // Board modal functions
-  const openBoardsModal = () => setIsBoardsModalOpen(true);
-  const closeBoardsModal = () => setIsBoardsModalOpen(false);
-  const toggleBoardsModal = () => setIsBoardsModalOpen(!isBoardsModalOpen);
+  const openBoardsModal = () => {
+    setIsBoardsModalOpen(true);
+    // trigger enter on next tick so CSS transition runs
+    window.setTimeout(() => setIsBoardsModalEntered(true), 0);
+  };
+
+  const closeBoardsModal = () => {
+    // start exit animation
+    setIsBoardsModalEntered(false);
+    // remove modal from DOM after animation completes (300ms)
+    window.setTimeout(() => setIsBoardsModalOpen(false), 300);
+  };
+
+  const toggleBoardsModal = () => {
+    if (isBoardsModalOpen) closeBoardsModal();
+    else openBoardsModal();
+  };
 
   // Edit task modal functions
   const openEditTaskModal = (task: Task) => {
@@ -312,6 +329,8 @@ export function ModalProvider({ children }: { children: ReactNode }) {
         isAddColumnModalOpen,
         openAddColumnModal,
         closeAddColumnModal,
+        // expose entered flag for animation sync
+        isBoardsModalEntered,
       }}
     >
       {children}

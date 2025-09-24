@@ -143,7 +143,7 @@ export default function EditTaskModal() {
       <div className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white p-6 md:max-w-[480px]">
         <h2 className="pb-6 text-lg font-bold">Edit Task</h2>
         <form onSubmit={handleSubmit} className="flex flex-col">
-          <label className="text-3 text-light-text-secondary pb-2 font-bold">
+          <label className="text-3 text-text-secondary pb-2 font-bold">
             Title
           </label>
           <input
@@ -155,17 +155,17 @@ export default function EditTaskModal() {
             required
           />
 
-          <label className="text-3 text-light-text-secondary pt-6 pb-2 font-bold">
+          <label className="text-3 text-text-secondary pt-6 pb-2 font-bold">
             Description
           </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="placeholder:text-dark-bg/25 h-[112px] w-full resize-none rounded border border-gray-300 px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
+            className="placeholder:text-dark-bg/25 h-[112px] w-full resize-none rounded border border-gray-300 px-4 py-2 text-[#000112]/25 placeholder:text-[13px] placeholder:font-medium"
             placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."
           />
 
-          <label className="text-3 text-light-text-secondary pt-6 pb-2 font-bold">
+          <label className="text-3 text-text-secondary pt-6 pb-2 font-bold">
             Subtasks
           </label>
           {subtasks.map((subtask, index) => (
@@ -198,7 +198,7 @@ export default function EditTaskModal() {
             + Add New Subtask
           </button>
 
-          <label className="text-3 text-light-text-secondary pb-2 font-bold">
+          <label className="text-3 text-text-secondary pb-2 font-bold">
             Status
           </label>
           <div className="relative mb-6" ref={dropdownRef}>
@@ -252,7 +252,7 @@ export default function EditTaskModal() {
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-primary mt-6 h-10 cursor-pointer rounded-3xl font-bold text-white disabled:opacity-50"
+            className="bg-primary h-10 cursor-pointer rounded-3xl font-bold text-white disabled:opacity-50"
           >
             {isLoading ? "Saving..." : "Save Changes"}
           </button>

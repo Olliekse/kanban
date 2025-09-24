@@ -306,7 +306,7 @@ export default function AddTaskModal() {
       <div className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white p-6 md:max-w-[480px]">
         <h2 className="pb-6 text-lg font-bold">Add New Task</h2>
         <form onSubmit={handleSubmit} className="flex flex-col">
-          <label className="text-3 text-light-text-secondary pb-2 font-bold">
+          <label className="text-3 text-text-secondary pb-2 font-bold">
             Title
           </label>
           <div className="flex flex-col">
@@ -326,7 +326,7 @@ export default function AddTaskModal() {
             )}
           </div>
 
-          <label className="text-3 text-light-text-secondary pt-6 pb-2 font-bold">
+          <label className="text-3 text-text-secondary pt-6 pb-2 font-bold">
             Description
           </label>
           <textarea
@@ -336,7 +336,7 @@ export default function AddTaskModal() {
             placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."
           />
 
-          <label className="text-3 text-light-text-secondary pt-6 pb-2 font-bold">
+          <label className="text-3 text-text-secondary pt-6 pb-2 font-bold">
             Subtasks
           </label>
           {subtasks.map((subtask, index) => (
@@ -379,7 +379,7 @@ export default function AddTaskModal() {
             + Add New Subtask
           </button>
 
-          <label className="text-3 text-light-text-secondary pb-2 font-bold">
+          <label className="text-3 text-text-secondary pb-2 font-bold">
             Status
           </label>
           <div className="relative mb-6" ref={dropdownRef}>
@@ -429,7 +429,7 @@ export default function AddTaskModal() {
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-primary mt-6 h-10 cursor-pointer rounded-3xl font-bold text-white disabled:opacity-50"
+            className="bg-primary h-10 cursor-pointer rounded-3xl font-bold text-white disabled:opacity-50"
           >
             {isLoading ? "Creating..." : "Create Task"}
           </button>

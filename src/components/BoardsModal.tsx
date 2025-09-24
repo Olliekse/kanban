@@ -4,25 +4,30 @@ import AddBoardModal from "./AddBoardModal";
 import { useModal } from "@/contexts/ModalContext";
 import { useBoards } from "@/contexts/BoardsContext";
 import { useEffect, useState } from "react";
+import { useTheme } from "@/contexts/ThemeContext";
 
 function BoardsModal() {
-  const { openAddBoardModal, isAddBoardModalOpen, closeBoardsModal } =
-    useModal();
+  const {
+    openAddBoardModal,
+    isAddBoardModalOpen,
+    closeBoardsModal,
+    isBoardsModalEntered,
+  } = useModal();
   const { boards, currentBoard, setCurrentBoard, isLoading } = useBoards();
 
-  // Trigger slide-in animation on tablet+
-  const [entered, setEntered] = useState(false);
-  useEffect(() => {
-    const id = window.setTimeout(() => setEntered(true), 0);
-    return () => window.clearTimeout(id);
-  }, []);
+  const handleCloseSidebar = () => {
+    // closeBoardsModal handles the animation timing via context
+    closeBoardsModal();
+  };
+
+  const { theme } = useTheme();
 
   return (
     <div className="fixed inset-0 z-50">
       {/* Overlay (click to close) */}
       <div
         className="absolute inset-0 bg-black/50 md:bg-transparent"
-        onClick={closeBoardsModal}
+        onClick={handleCloseSidebar}
       />
 
       {/* Mobile - centered modal */}
@@ -119,20 +124,31 @@ function BoardsModal() {
 
       {/* Tablet+ - left sliding drawer */}
       <div
-        className={`bg-theme-surface absolute top-[81px] left-0 hidden h-[calc(100vh-81px)] w-[264px] transform shadow-sm transition-transform duration-300 ease-out md:block ${
-          entered ? "translate-x-0" : "-translate-x-full"
+        className={`absolute top-0 left-0 z-70 hidden h-[100vh] w-[300px] transform border-r border-[#E4EBFA] bg-white transition-all duration-300 ease-out md:block ${
+          isBoardsModalEntered
+            ? "visible translate-x-0 opacity-100"
+            : "invisible -translate-x-full opacity-0"
         }`}
       >
         <div className="flex h-full flex-col">
           {/* Header */}
-          <div className="py-4">
-            <h3 className="text-theme-secondary self-start pr-6 pb-[19px] pl-6 text-[12px] font-bold tracking-[2.4px] uppercase">
+          <div className="px-[34px] pt-8">
+            <button aria-label="Open boards" className="flex items-center">
+              <Image
+                src={theme === "dark" ? "/logo-light.svg" : "/logo-dark.svg"}
+                alt="kanban logo"
+                width={152}
+                height={25}
+                className="cursor-pointer"
+              />
+            </button>
+            <h3 className="text-theme-secondary self-start pt-[54px] pr-6 pb-[19px] text-[12px] font-bold tracking-[2.4px] uppercase">
               All boards ({boards.length})
             </h3>
           </div>
 
           {/* Scrollable content area */}
-          <div className="flex-1 overflow-y-auto pr-2">
+          <div className="flex-1 overflow-y-auto pr-[23px]">
             {isLoading ? (
               <div className="flex justify-center py-4">
                 <p className="text-theme-secondary text-sm">
@@ -157,7 +173,7 @@ function BoardsModal() {
               boards.map((board) => (
                 <div
                   key={board.id}
-                  className={`flex cursor-pointer gap-3 pt-[14px] pb-[15px] pl-6 hover:bg-gray-100 ${
+                  className={`flex cursor-pointer gap-3 pt-[14px] pb-[15px] pl-8 hover:bg-gray-100 ${
                     currentBoard?.id === board.id
                       ? "bg-primary rounded-r-3xl"
                       : ""
@@ -184,7 +200,7 @@ function BoardsModal() {
             )}
             {boards.length > 0 && (
               <div
-                className="flex cursor-pointer gap-3 pt-[14px] pb-[15px] pl-6 hover:bg-gray-100"
+                className="flex cursor-pointer gap-3 pt-[14px] pb-[15px] pl-8 hover:bg-gray-100"
                 onClick={openAddBoardModal}
               >
                 <Image
@@ -194,7 +210,7 @@ function BoardsModal() {
                   width={16}
                   alt="board icon"
                 />
-                <p className="text-theme-secondary text-[15px] font-bold">
+                <p className="text-primary text-[15px] font-bold">
                   + Create New Board
                 </p>
               </div>
@@ -203,7 +219,7 @@ function BoardsModal() {
 
           {/* Fixed bottom section */}
           <div className="border-theme p-4">
-            <div className="bg-theme-surface-secondary mr-4 ml-6 flex h-[48px] items-center justify-center rounded-lg">
+            <div className="bg-theme-surface-secondary flex h-[48px] items-center justify-center rounded-lg pr-6 pl-6">
               <div className="flex h-5 w-[121px] justify-between">
                 <Image
                   className="object-none"
@@ -224,9 +240,9 @@ function BoardsModal() {
             </div>
 
             {/* Hide Sidebar Option - Only visible on tablet+ */}
-            <div className="mt-4 mr-4 ml-6">
+            <div className="mt-4 mr-4">
               <button
-                onClick={closeBoardsModal}
+                onClick={handleCloseSidebar}
                 className="flex w-full items-center gap-3 rounded-lg py-3 pl-3 text-left transition-colors hover:bg-gray-100"
               >
                 <Image

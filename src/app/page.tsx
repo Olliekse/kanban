@@ -51,6 +51,7 @@ export default function Home() {
     isEditBoardModalOpen,
     isAddColumnModalOpen,
     openAddColumnModal,
+    isBoardsModalEntered,
   } = useModal();
 
   /**
@@ -126,8 +127,8 @@ export default function Home() {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div
-        className={`bg-theme-secondary min-h-screen px-4 py-6 transition-[padding] duration-300 md:px-6 lg:px-8 ${
-          isBoardsModalOpen ? "md:pl-[289px]" : ""
+        className={`bg-theme-secondary min-h-screen px-4 py-5 transition-[padding] duration-300 md:px-6 ${
+          isBoardsModalEntered ? "md:pl-[289px]" : ""
         }`}
       >
         {/* 
@@ -136,7 +137,7 @@ export default function Home() {
           The +1 accounts for the "New Column" button
         */}
         <div
-          className={`grid gap-4 overflow-x-auto md:gap-6`}
+          className={`grid gap-[22px] overflow-x-auto md:gap-6`}
           style={{
             gridTemplateColumns: `repeat(${(currentBoard.board_columns?.length || 0) + 1}, 280px)`,
           }}
@@ -245,7 +246,7 @@ export default function Home() {
           <div className="flex h-[calc(100vh-200px)] min-h-[400px] items-center justify-center">
             <button
               onClick={openAddColumnModal}
-              className="bg-theme-new-column hover:bg-theme-secondary text-theme-secondary hover:text-theme-primary flex h-full w-full items-center justify-center rounded-lg transition-colors duration-200"
+              className="bg-theme-new-column hover:bg-theme-secondary text-theme-secondary hover:text-theme-primary mt-[220px] flex h-full w-full items-center justify-center rounded-lg transition-colors duration-200 md:h-[814px]"
             >
               <span className="text-[24px] font-bold">+ New Column</span>
             </button>
