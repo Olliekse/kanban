@@ -65,8 +65,14 @@ function TaskDetailsModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50">
-      <div className="relative mx-4 w-full max-w-[480px] rounded-lg bg-white px-4 py-6">
+    <div
+      onClick={closeTaskDetailsModal}
+      className="fixed inset-0 z-60 flex items-center justify-center bg-black/50"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative mx-4 w-full max-w-[480px] rounded-lg bg-white px-4 py-6"
+      >
         <div className="flex flex-col gap-6">
           <div className="flex items-start justify-between">
             <h3 className="text-[18px] font-bold text-[#000112]">

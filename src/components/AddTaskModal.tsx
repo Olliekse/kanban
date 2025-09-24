@@ -302,8 +302,11 @@ export default function AddTaskModal() {
   }
 
   return (
-    <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50">
-      <div className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white p-6 md:max-w-[480px]">
+    <div
+      onClick={closeTasksModal}
+      className="fixed inset-0 z-60 flex items-center justify-center bg-black/50"
+    >
+      <div onClick={(e) => e.stopPropagation()} className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white p-6 md:max-w-[480px]">
         <h2 className="pb-6 text-lg font-bold">Add New Task</h2>
         <form onSubmit={handleSubmit} className="flex flex-col">
           <label className="text-3 text-text-secondary pb-2 font-bold">
