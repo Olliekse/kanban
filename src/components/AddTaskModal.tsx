@@ -27,6 +27,7 @@ import { useState, useEffect, useRef } from "react";
 import { useTasks } from "@/contexts/TasksContext";
 import { useBoards } from "@/contexts/BoardsContext";
 import { z } from "zod";
+import Button from "./Button";
 
 /**
  * Task Interface
@@ -306,12 +307,13 @@ export default function AddTaskModal() {
       onClick={closeTasksModal}
       className="fixed inset-0 z-60 flex items-center justify-center bg-black/50"
     >
-      <div onClick={(e) => e.stopPropagation()} className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white p-6 md:max-w-[480px]">
-        <h2 className="pb-6 text-lg font-bold">Add New Task</h2>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white p-6 md:max-w-[480px]"
+      >
+        <h2 className="heading-l pb-6">Add New Task</h2>
         <form onSubmit={handleSubmit} className="flex flex-col">
-          <label className="text-3 text-text-secondary pb-2 font-bold">
-            Title
-          </label>
+          <label className="heading-s text-secondary pb-2">Title</label>
           <div className="flex flex-col">
             <input
               type="text"
@@ -323,13 +325,11 @@ export default function AddTaskModal() {
               placeholder="e.g. Take coffee break"
             />
             {errors.title && (
-              <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.title}
-              </p>
+              <p className="body-m mt-1 text-red-500">{errors.title}</p>
             )}
           </div>
 
-          <label className="text-3 text-text-secondary pt-6 pb-2 font-bold">
+          <label className="heading-s text-secondary pt-6 pb-2">
             Description
           </label>
           <textarea
@@ -339,9 +339,7 @@ export default function AddTaskModal() {
             placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."
           />
 
-          <label className="text-3 text-text-secondary pt-6 pb-2 font-bold">
-            Subtasks
-          </label>
+          <label className="heading-s text-secondary pt-6 pb-2">Subtasks</label>
           {subtasks.map((subtask, index) => (
             <div key={index} className="mb-3">
               <div className="flex items-center justify-between">
@@ -363,37 +361,41 @@ export default function AddTaskModal() {
                     </span>
                   )}
                 </div>
-                <button
+                <Button
+                  variant="destructive"
+                  size="sm"
                   type="button"
                   onClick={() => removeSubtask(index)}
-                  className="ml-4 text-red-500 hover:text-red-700"
+                  className="ml-4 !h-8 !w-8 !p-0"
                 >
                   ✕
-                </button>
+                </Button>
               </div>
             </div>
           ))}
 
-          <button
+          <Button
+            variant="secondary"
+            size="sm"
             type="button"
             onClick={addSubtask}
-            className="bg-primary/10 text-primary mb-6 h-10 cursor-pointer rounded-3xl font-bold"
+            className="mb-6"
           >
             + Add New Subtask
-          </button>
+          </Button>
 
-          <label className="text-3 text-text-secondary pb-2 font-bold">
-            Status
-          </label>
+          <label className="heading-s text-secondary pb-2">Status</label>
           <div className="relative mb-6" ref={dropdownRef}>
             {/* Custom dropdown button */}
-            <button
+            <Button
+              variant="secondary"
+              size="sm"
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="w-full cursor-pointer rounded-xl border border-gray-200 bg-white px-4 py-3 pr-10 text-left text-black focus:outline-none"
+              className="w-full justify-start !rounded-xl !py-3"
             >
               {getSelectedColumnName()}
-            </button>
+            </Button>
 
             {/* Dropdown arrow icon */}
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
@@ -416,26 +418,29 @@ export default function AddTaskModal() {
             {isDropdownOpen && (
               <div className="absolute top-full right-0 left-0 z-10 mt-1 rounded-xl border border-gray-200 bg-white shadow-lg">
                 {currentBoard?.board_columns?.map((column) => (
-                  <button
+                  <Button
                     key={column.id}
+                    variant="secondary"
+                    size="sm"
                     type="button"
                     onClick={() => handleColumnSelect(column.id)}
-                    className="w-full px-4 py-3 text-left text-gray-400 first:rounded-t-xl last:rounded-b-xl hover:bg-gray-50"
+                    className="w-full justify-start !rounded-none !py-3 text-gray-400 first:!rounded-t-xl last:!rounded-b-xl"
                   >
                     {column.name}
-                  </button>
+                  </Button>
                 )) || []}
               </div>
             )}
           </div>
 
-          <button
+          <Button
+            variant="primary"
+            size="sm"
             type="submit"
             disabled={isLoading}
-            className="bg-primary h-10 cursor-pointer rounded-3xl font-bold text-white disabled:opacity-50"
           >
             {isLoading ? "Creating..." : "Create Task"}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

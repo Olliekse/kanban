@@ -58,8 +58,15 @@ export default function RootLayout({
               <TasksProvider>
                 {/* Header component that appears on every page */}
                 <Header />
+                {/* Skip link for keyboard users */}
+                <a className="skip-to-content" href="#main">
+                  Skip to content
+                </a>
+
                 {/* Main content area - this is where page.tsx renders */}
-                {children}
+                <main id="main" tabIndex={-1}>
+                  {children}
+                </main>
               </TasksProvider>
             </ModalProvider>
           </BoardsProvider>

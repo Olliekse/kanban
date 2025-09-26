@@ -24,6 +24,7 @@ import { useModal } from "@/contexts/ModalContext";
 import { useBoards } from "@/contexts/BoardsContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useState, useRef, useEffect } from "react";
+import Button from "./Button";
 
 /**
  * Header Component
@@ -103,7 +104,11 @@ function Header() {
       */}
       <div className="bg-theme-primary relative z-60 grid w-full grid-cols-[25px_250px_1fr] items-center justify-between px-4 py-[17px] md:hidden">
         {/* Mobile logo and boards toggle */}
-        <button aria-label="Open boards" className="flex items-center">
+        <button
+          aria-label="Open boards"
+          onClick={() => toggleBoardsModal()}
+          className="flex items-center"
+        >
           <Image
             src="/logo-mobile.svg"
             alt="header logo"
@@ -112,26 +117,33 @@ function Header() {
           />
         </button>
 
-        {/* Current board name display */}
-        <div className="flex items-center gap-2 pl-4">
+        {/* Current board name display (open boards on mobile) */}
+        <button
+          type="button"
+          aria-label="Open boards"
+          onClick={() => toggleBoardsModal()}
+          className="flex cursor-pointer items-center gap-2 pl-4"
+        >
           <span className="text-theme-primary text-[18px] font-bold">
             {currentBoard?.name || "Select Board"}
           </span>
           <Image
-            className="pointer-events-none mt-2 -translate-y-1/2 object-none"
+            className={`mt-2 -translate-y-1/2 object-none transition-transform ${isBoardsModalOpen ? "rotate-180" : ""}`}
             src="/icon-chevron-down.svg"
             width={9}
             height={5}
             alt="dropdown arrow"
           />
-        </div>
+        </button>
 
         {/* Action buttons */}
         <div className="flex items-center gap-4">
           {/* Add task button with visual feedback */}
-          <button
+          <Button
+            variant="secondary"
+            size="sm"
             onClick={() => openTasksModal()}
-            className={`${tasks.length !== 0 ? "bg-primary" : "bg-primary/20"} flex h-8 w-12 cursor-pointer items-center justify-center rounded-3xl`}
+            className={`${tasks.length !== 0 ? "" : "opacity-20"} h-8 w-12 p-0`}
           >
             <Image
               alt="add task button"
@@ -139,13 +151,13 @@ function Header() {
               width={12}
               height={12}
             />
-          </button>
+          </Button>
 
           {/* Board options dropdown */}
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center justify-center rounded-lg transition-colors hover:bg-gray-100"
+              className="flex cursor-pointer items-center justify-center rounded-lg transition-colors hover:bg-gray-100"
               aria-label="Board options"
             >
               <Image
@@ -210,12 +222,13 @@ function Header() {
         {/* Right section: Action buttons */}
         <div className="flex items-center gap-6 lg:pb-2">
           {/* Add task button with text label */}
-          <button
+          <Button
+            variant="primary"
             onClick={() => openTasksModal()}
-            className={`${tasks.length !== 0 ? "bg-primary" : "bg-primary/20"} hidden h-12 cursor-pointer items-center justify-center rounded-3xl px-6 text-[15px] font-bold text-white md:flex`}
+            className={`${tasks.length !== 0 ? "" : "opacity-20"} hidden md:flex`}
           >
             + Add New Task
-          </button>
+          </Button>
 
           {/* Board options dropdown */}
           <div className="relative" ref={dropdownRef}>

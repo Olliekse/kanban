@@ -3,6 +3,7 @@
 import { useModal } from "@/contexts/ModalContext";
 import { useBoards } from "@/contexts/BoardsContext";
 import { useState, useEffect } from "react";
+import Button from "./Button";
 
 export default function EditBoardModal() {
   const [boardName, setBoardName] = useState("");
@@ -119,21 +120,24 @@ export default function EditBoardModal() {
             </div>
           ))}
 
-          <button
+          <Button
+            variant="secondary"
+            size="sm"
             type="button"
             onClick={addColumn}
-            className="bg-primary/10 text-primary mb-6 h-10 cursor-pointer rounded-3xl font-bold"
+            className="mb-6"
           >
             + Add New Column
-          </button>
+          </Button>
 
-          <button
+          <Button
+            variant="primary"
+            size="sm"
             type="submit"
             disabled={isLoading}
-            className="bg-primary h-10 cursor-pointer rounded-3xl font-bold text-white disabled:opacity-50"
           >
             {isLoading ? "Saving Changes..." : "Save Changes"}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

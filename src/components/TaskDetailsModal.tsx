@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useModal } from "@/contexts/ModalContext";
 import { useTasks } from "@/contexts/TasksContext";
 import { useBoards } from "@/contexts/BoardsContext";
+import Button from "./Button";
 
 function TaskDetailsModal() {
   const {
@@ -75,9 +76,7 @@ function TaskDetailsModal() {
       >
         <div className="flex flex-col gap-6">
           <div className="flex items-start justify-between">
-            <h3 className="text-[18px] font-bold text-[#000112]">
-              {selectedTask.title}
-            </h3>
+            <h3 className="heading-l text-primary">{selectedTask.title}</h3>
             <div className="relative">
               <button
                 aria-label="Task actions"
@@ -94,28 +93,30 @@ function TaskDetailsModal() {
               </button>
               {menuOpen && (
                 <div className="absolute right-0 z-10 mt-2 w-40 rounded-md bg-white p-2 shadow-lg">
-                  <button
-                    className="w-full rounded px-3 py-2 text-left text-[13px] font-medium hover:bg-gray-100"
+                  <Button
+                    variant="secondary"
+                    size="sm"
                     onClick={handleEdit}
+                    className="w-full justify-start !rounded-md !py-2"
                   >
                     Edit Task
-                  </button>
-                  <button
-                    className="w-full rounded px-3 py-2 text-left text-[13px] font-medium text-red-600 hover:bg-red-50"
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    size="sm"
                     onClick={handleDelete}
+                    className="w-full justify-start !rounded-md !py-2"
                   >
                     Delete Task
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>
           </div>
           {selectedTask.description && (
-            <p className="text-text-secondary text-[13px] leading-[23px] font-medium">
-              {selectedTask.description}
-            </p>
+            <p className="body-l text-secondary">{selectedTask.description}</p>
           )}
-          <span className="text-text-secondary text-[12px] font-bold">
+          <span className="heading-s text-secondary">
             Subtasks ({completedCount} of {totalCount})
           </span>
         </div>
@@ -130,7 +131,7 @@ function TaskDetailsModal() {
                 style={{ accentColor: "var(--color-primary)" }}
               />
               <p
-                className={`text-[12px] font-bold ${
+                className={`heading-s ${
                   s.completed ? "text-gray-400 line-through" : "text-[#000112]"
                 }`}
               >
@@ -140,9 +141,7 @@ function TaskDetailsModal() {
           ))}
         </div>
         <div className="flex flex-col gap-2">
-          <span className="text-text-secondary text-[12px] font-bold">
-            Current status
-          </span>
+          <span className="heading-s text-secondary">Current status</span>
           <div className="relative mb-6">
             <select
               value={selectedTask.column_id}

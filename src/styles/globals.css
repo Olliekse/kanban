@@ -2,8 +2,9 @@
 
 @theme {
   --font-sans:
-    var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    "Plus Jakarta Sans", var(--font-geist-sans), ui-sans-serif, system-ui,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
 
   /* Theme-aware color variables */
   --color-primary: #635fc7;
@@ -67,6 +68,108 @@
   background-color: var(--color-new-column-bg);
 }
 
+/* Typography scale and utilities 
+   Follows the design spec exactly with:
+   - XL: Bold 24px, line 30px
+   - L:  Bold 18px, line 23px
+   - M:  Bold 15px, line 19px
+   - S:  Bold 12px, line 15px
+   Body variants:
+   - L:  Medium 13px, line 23px
+   - M:  Medium 12px, line 15px */
+:root {
+  /* Base sizes */
+  --fs-12: 0.75rem; /* 12px */
+  --fs-13: 0.8125rem; /* 13px */
+  --fs-15: 0.9375rem; /* 15px */
+  --fs-18: 1.125rem; /* 18px */
+  --fs-24: 1.5rem; /* 24px */
+
+  /* Line heights */
+  --lh-15: 0.9375rem; /* 15px */
+  --lh-19: 1.1875rem; /* 19px */
+  --lh-23: 1.4375rem; /* 23px */
+  --lh-30: 1.875rem; /* 30px */
+}
+
+/* Base typography */
+html {
+  font-size: 16px; /* Use 16px base for better accessibility */
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+  font-size: var(--fs-13);
+  line-height: var(--lh-23);
+  font-weight: 500;
+}
+
+/* Heading styles */
+.heading-xl {
+  font-size: var(--fs-24);
+  line-height: var(--lh-30);
+  font-weight: 700;
+}
+
+.heading-l {
+  font-size: var(--fs-18);
+  line-height: var(--lh-23);
+  font-weight: 700;
+}
+
+.heading-m {
+  font-size: var(--fs-15);
+  line-height: var(--lh-19);
+  font-weight: 700;
+}
+
+.heading-s {
+  font-size: var(--fs-12);
+  line-height: var(--lh-15);
+  font-weight: 700;
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+}
+
+/* Body text styles */
+.body-l {
+  font-size: var(--fs-13);
+  line-height: var(--lh-23);
+  font-weight: 500;
+}
+
+.body-m {
+  font-size: var(--fs-12);
+  line-height: var(--lh-15);
+  font-weight: 500;
+}
+
+/* Text colors */
+.text-primary {
+  color: var(--color-text-primary);
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+/* Common text treatments */
+.text-medium {
+  font-weight: 500;
+}
+
+.text-bold {
+  font-weight: 700;
+}
+
+p {
+  margin: 0;
+}
+
 @keyframes slideRight {
   from {
     transform: translateX(0);
@@ -91,4 +194,213 @@
 
 .slide-left {
   animation: slideLeft 200ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Accessibility: focus styles and skip link */
+
+:focus {
+  outline: none; /* remove default focus for mouse users; we'll show focus-visible below */
+}
+
+/* Visible focus for keyboard users */
+:focus-visible,
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Ensure interactive elements without native outline show the same treatment */
+button,
+a,
+input,
+textarea,
+select,
+[role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Skip-to-content link: visually hidden but becomes visible when focused */
+.skip-to-content {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  transform: translateY(-120%);
+  opacity: 0;
+  z-index: 1000;
+  transition:
+    transform 150ms ease,
+    opacity 150ms ease;
+}
+
+.skip-to-content:focus,
+.skip-to-content:focus-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Button styles: primary, secondary, destructive (large & small) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 0;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 9999px; /* pill */
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease,
+    transform 120ms ease,
+    opacity 160ms ease;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn--lg {
+  padding: 0.75rem 2rem;
+  min-height: 48px;
+  font-size: 1rem; /* 16px */
+}
+
+.btn--sm {
+  padding: 0.5rem 1.25rem;
+  min-height: 40px;
+  font-size: 0.9375rem; /* 15px */
+}
+
+/* Primary */
+.btn-primary {
+  background: var(--color-primary);
+  color: #ffffff;
+  box-shadow: 0 6px 12px rgba(99, 95, 199, 0.09);
+}
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  background: var(--color-primary-light);
+  color: #fff;
+}
+
+/* Secondary: white background with primary text; on hover becomes primary filled */
+.btn-secondary {
+  background: var(--color-surface);
+  color: var(--color-primary);
+  border: 1px solid transparent;
+  box-shadow: none;
+}
+.btn-secondary:hover,
+.btn-secondary:focus-visible {
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+/* Destructive */
+.btn-destructive {
+  background: var(--color-danger);
+  color: #ffffff;
+}
+.btn-destructive:hover,
+.btn-destructive:focus-visible {
+  background: var(--color-danger-light);
+  color: #fff;
+}
+
+/* Ensure focus-visible uses contrast-friendly outline (if used alongside the built-in outline) */
+.btn:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-primary) 60%, transparent);
+  outline-offset: 3px;
+}
+
+/* Loading state */
+.btn--loading {
+  cursor: wait;
+}
+
+.btn__loading-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn__spinner {
+  animation: spin 1s linear infinite;
+  width: 16px;
+  height: 16px;
+}
+
+.btn__spinner-track {
+  fill: none;
+  stroke: currentColor;
+  opacity: 0.2;
+  stroke-width: 2;
+}
+
+.btn__spinner-head {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 15;
+  stroke-dashoffset: 60;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Disabled state */
+.btn--disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Dark theme adjustments for buttons */
+[data-theme="dark"] .btn-primary {
+  background: var(--color-primary);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.28);
+}
+[data-theme="dark"] .btn-primary:hover,
+[data-theme="dark"] .btn-primary:focus-visible {
+  background: var(--color-primary-light);
+}
+
+[data-theme="dark"] .btn-secondary {
+  background: var(--color-surface);
+  color: var(--color-primary);
+}
+[data-theme="dark"] .btn-secondary:hover,
+[data-theme="dark"] .btn-secondary:focus-visible {
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .btn-destructive {
+  background: var(--color-danger);
+}
+[data-theme="dark"] .btn-destructive:hover,
+[data-theme="dark"] .btn-destructive:focus-visible {
+  background: var(--color-danger-light);
 }

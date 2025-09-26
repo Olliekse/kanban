@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useModal } from "@/contexts/ModalContext";
 import { useTasks } from "@/contexts/TasksContext";
 import { useBoards } from "@/contexts/BoardsContext";
+import Button from "./Button";
 
 interface SubtaskFormValue {
   id?: string;
@@ -141,9 +142,9 @@ export default function EditTaskModal() {
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50">
       <div className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white p-6 md:max-w-[480px]">
-        <h2 className="pb-6 text-lg font-bold">Edit Task</h2>
+        <h2 className="heading-l pb-6">Edit Task</h2>
         <form onSubmit={handleSubmit} className="flex flex-col">
-          <label className="text-3 text-text-secondary pb-2 font-bold">
+          <label className="heading-s text-secondary pb-2">
             Title
           </label>
           <input
@@ -155,7 +156,7 @@ export default function EditTaskModal() {
             required
           />
 
-          <label className="text-3 text-text-secondary pt-6 pb-2 font-bold">
+          <label className="heading-s text-secondary pt-6 pb-2">
             Description
           </label>
           <textarea
@@ -165,7 +166,7 @@ export default function EditTaskModal() {
             placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."
           />
 
-          <label className="text-3 text-text-secondary pt-6 pb-2 font-bold">
+          <label className="heading-s text-secondary pt-6 pb-2">
             Subtasks
           </label>
           {subtasks.map((subtask, index) => (
@@ -180,36 +181,42 @@ export default function EditTaskModal() {
                 className="placeholder:text-dark-bg/25 w-full rounded border border-gray-300 px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
                 placeholder="e.g. Make coffee"
               />
-              <button
+              <Button
+                variant="destructive"
+                size="sm"
                 type="button"
                 onClick={() => removeSubtask(index)}
-                className="ml-4 cursor-pointer text-red-500 hover:text-red-700"
+                className="ml-4 !p-0 !w-8 !h-8"
               >
                 ✕
-              </button>
+              </Button>
             </div>
           ))}
 
-          <button
+          <Button
+            variant="secondary"
+            size="sm"
             type="button"
             onClick={addSubtask}
-            className="bg-primary/10 text-primary mb-6 h-10 cursor-pointer rounded-3xl font-bold"
+            className="mb-6"
           >
             + Add New Subtask
-          </button>
+          </Button>
 
-          <label className="text-3 text-text-secondary pb-2 font-bold">
+          <label className="heading-s text-secondary pb-2">
             Status
           </label>
           <div className="relative mb-6" ref={dropdownRef}>
             {/* Custom dropdown button */}
-            <button
+            <Button
+              variant="secondary"
+              size="sm"
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="w-full cursor-pointer rounded-xl border border-gray-200 bg-white px-4 py-3 pr-10 text-left text-gray-500 focus:outline-none"
+              className="w-full justify-start !py-3 !rounded-xl text-gray-500"
             >
               {getSelectedColumnName()}
-            </button>
+            </Button>
 
             {/* Dropdown arrow icon */}
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
@@ -232,30 +239,33 @@ export default function EditTaskModal() {
             {isDropdownOpen && (
               <div className="absolute top-full right-0 left-0 z-10 mt-1 rounded-xl border border-gray-200 bg-white shadow-lg">
                 {currentBoard?.board_columns?.map((column) => (
-                  <button
+                  <Button
                     key={column.id}
+                    variant="secondary"
+                    size="sm"
                     type="button"
                     onClick={() => handleColumnSelect(column.id)}
-                    className={`w-full px-4 py-3 text-left first:rounded-t-xl last:rounded-b-xl hover:bg-gray-50 ${
+                    className={`w-full justify-start !py-3 !rounded-none first:!rounded-t-xl last:!rounded-b-xl ${
                       columnId === column.id
-                        ? "font-medium text-black"
-                        : "text-gray-400"
+                        ? "!text-black font-medium"
+                        : "!text-gray-400"
                     }`}
                   >
                     {column.name}
-                  </button>
+                  </Button>
                 )) || []}
               </div>
             )}
           </div>
 
-          <button
+          <Button
+            variant="primary"
+            size="sm"
             type="submit"
-            disabled={isLoading}
-            className="bg-primary h-10 cursor-pointer rounded-3xl font-bold text-white disabled:opacity-50"
+            isLoading={isLoading}
           >
-            {isLoading ? "Saving..." : "Save Changes"}
-          </button>
+            Save Changes
+          </Button>
         </form>
       </div>
     </div>

@@ -58,7 +58,7 @@ function BoardsModal() {
             boards.map((board) => (
               <div
                 key={board.id}
-                className={`flex cursor-pointer gap-3 pt-[14px] pb-[15px] pl-6 hover:bg-gray-100 ${
+                className={`flex w-[240px] cursor-pointer gap-3 pt-[14px] pb-[15px] pl-6 hover:rounded-3xl hover:bg-gray-100 ${
                   currentBoard?.id === board.id
                     ? "bg-primary rounded-r-3xl"
                     : ""
@@ -70,7 +70,11 @@ function BoardsModal() {
               >
                 <Image
                   className="object-none"
-                  src="/icon-board.svg"
+                  src={
+                    currentBoard?.id === board.id
+                      ? "/icon-board-white.svg"
+                      : "/icon-board.svg"
+                  }
                   height={16}
                   width={16}
                   alt="board icon"
@@ -89,7 +93,7 @@ function BoardsModal() {
               onClick={openAddBoardModal}
             >
               <Image
-                className="object-none"
+                className={`object-none`}
                 src="/icon-board.svg"
                 height={16}
                 width={16}
@@ -185,7 +189,11 @@ function BoardsModal() {
                 >
                   <Image
                     className="object-none"
-                    src="/icon-board.svg"
+                    src={
+                      currentBoard?.id === board.id
+                        ? "/icon-board-white.svg"
+                        : "/icon-board.svg"
+                    }
                     height={16}
                     width={16}
                     alt="board icon"

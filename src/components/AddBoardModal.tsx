@@ -3,6 +3,7 @@
 import { useModal } from "@/contexts/ModalContext";
 import { useBoards } from "@/contexts/BoardsContext";
 import { useState } from "react";
+import Button from "./Button";
 
 export default function AddBoardModal() {
   const [boardName, setBoardName] = useState("");
@@ -87,32 +88,38 @@ export default function AddBoardModal() {
                 placeholder="e.g. Todo"
                 required
               />
-              <button
+              <Button
+                variant="destructive"
+                size="sm"
                 type="button"
                 onClick={() => removeColumn(index)}
-                className="ml-4 text-[#979797] hover:text-red-700"
+                className="ml-4 !h-8 !w-8 !p-0"
                 disabled={columns.length === 1}
               >
                 ✕
-              </button>
+              </Button>
             </div>
           ))}
 
-          <button
+          <Button
+            variant="secondary"
+            size="sm"
             type="button"
             onClick={addColumn}
-            className="bg-primary/10 text-primary mb-6 h-10 cursor-pointer rounded-3xl font-bold"
+            className="mb-6"
           >
             + Add New Column
-          </button>
+          </Button>
 
-          <button
+          <Button
+            variant="primary"
+            size="sm"
             type="submit"
             disabled={isLoading}
-            className="bg-primary mt-6 h-10 cursor-pointer rounded-3xl font-bold text-white disabled:opacity-50"
+            className="mt-6"
           >
             {isLoading ? "Creating..." : "Create New Board"}
-          </button>
+          </Button>
         </form>
       </div>
     </div>
