@@ -82,8 +82,8 @@ export default function AddColumnModal() {
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50">
-      <div className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white p-6">
-        <h2 className="pb-6 text-lg font-bold text-[#000112]">
+      <div className="bg-theme-surface relative mx-4 w-full max-w-[343px] rounded-lg p-6">
+        <h2 className="text-theme-primary pb-6 text-lg font-bold">
           Add New Column
         </h2>
         <form onSubmit={handleSubmit} className="flex flex-col">
@@ -95,7 +95,7 @@ export default function AddColumnModal() {
               type="text"
               value={columnName}
               onChange={(e) => setColumnName(e.target.value)}
-              className={`placeholder:text-dark-bg/25 w-full rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium ${
+              className={`placeholder:text-theme-secondary/50 text-theme-primary w-full rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium ${
                 errors.columnName ? "border-red-500" : "border-gray-300"
               }`}
               placeholder="e.g. In Progress"

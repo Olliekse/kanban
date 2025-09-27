@@ -141,32 +141,30 @@ export default function EditTaskModal() {
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50">
-      <div className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white p-6 md:max-w-[480px]">
+      <div className="bg-theme-surface relative mx-4 w-full max-w-[343px] rounded-lg p-6 md:max-w-[480px]">
         <h2 className="heading-l pb-6">Edit Task</h2>
         <form onSubmit={handleSubmit} className="flex flex-col">
-          <label className="heading-s text-secondary pb-2">
-            Title
-          </label>
+          <label className="heading-s text-theme-primary pb-2">Title</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="placeholder:text-dark-bg/25 w-full rounded border border-gray-300 px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
+            className="placeholder:text-theme-secondary/50 border-theme text-theme-primary bg-theme-secondary w-full rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
             placeholder="e.g. Take coffee break"
             required
           />
 
-          <label className="heading-s text-secondary pt-6 pb-2">
+          <label className="heading-s text-theme-primary pt-6 pb-2">
             Description
           </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="placeholder:text-dark-bg/25 h-[112px] w-full resize-none rounded border border-gray-300 px-4 py-2 text-[#000112]/25 placeholder:text-[13px] placeholder:font-medium"
+            className="placeholder:text-theme-secondary/50 border-theme text-theme-primary bg-theme-secondary h-[112px] w-full resize-none rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
             placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."
           />
 
-          <label className="heading-s text-secondary pt-6 pb-2">
+          <label className="heading-s text-theme-primary pt-6 pb-2">
             Subtasks
           </label>
           {subtasks.map((subtask, index) => (
@@ -178,7 +176,7 @@ export default function EditTaskModal() {
                 type="text"
                 value={subtask.title}
                 onChange={(e) => updateSubtask(index, e.target.value)}
-                className="placeholder:text-dark-bg/25 w-full rounded border border-gray-300 px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
+                className="placeholder:text-theme-secondary/50 border-theme text-theme-primary bg-theme-secondary w-full rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
                 placeholder="e.g. Make coffee"
               />
               <Button
@@ -186,9 +184,13 @@ export default function EditTaskModal() {
                 size="sm"
                 type="button"
                 onClick={() => removeSubtask(index)}
-                className="ml-4 !p-0 !w-8 !h-8"
+                className="ml-4 !h-8 !w-8 !p-0"
               >
-                ✕
+                <img
+                  src="/icon-cross.svg"
+                  alt="Remove subtask"
+                  className="h-4 w-4"
+                />
               </Button>
             </div>
           ))}
@@ -198,14 +200,12 @@ export default function EditTaskModal() {
             size="sm"
             type="button"
             onClick={addSubtask}
-            className="mb-6"
+            className="!text-primary mb-6 !bg-white"
           >
             + Add New Subtask
           </Button>
 
-          <label className="heading-s text-secondary pb-2">
-            Status
-          </label>
+          <label className="heading-s text-theme-primary pb-2">Status</label>
           <div className="relative mb-6" ref={dropdownRef}>
             {/* Custom dropdown button */}
             <Button
@@ -213,7 +213,7 @@ export default function EditTaskModal() {
               size="sm"
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="w-full justify-start !py-3 !rounded-xl text-gray-500"
+              className="!border-theme !bg-theme-secondary w-full justify-start !rounded-xl !px-4 !py-3 !text-white"
             >
               {getSelectedColumnName()}
             </Button>
@@ -221,7 +221,7 @@ export default function EditTaskModal() {
             {/* Dropdown arrow icon */}
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
               <svg
-                className={`h-4 w-4 text-gray-400 transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
+                className={`text-primary h-4 w-4 transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -237,7 +237,7 @@ export default function EditTaskModal() {
 
             {/* Custom dropdown menu */}
             {isDropdownOpen && (
-              <div className="absolute top-full right-0 left-0 z-10 mt-1 rounded-xl border border-gray-200 bg-white shadow-lg">
+              <div className="border-theme bg-theme-surface absolute top-full right-0 left-0 z-10 mt-1 rounded-xl border shadow-lg">
                 {currentBoard?.board_columns?.map((column) => (
                   <Button
                     key={column.id}
@@ -245,10 +245,10 @@ export default function EditTaskModal() {
                     size="sm"
                     type="button"
                     onClick={() => handleColumnSelect(column.id)}
-                    className={`w-full justify-start !py-3 !rounded-none first:!rounded-t-xl last:!rounded-b-xl ${
+                    className={`!bg-theme-secondary w-full justify-start !rounded-none !py-3 first:!rounded-t-xl last:!rounded-b-xl ${
                       columnId === column.id
-                        ? "!text-black font-medium"
-                        : "!text-gray-400"
+                        ? "!text-theme-primary font-medium"
+                        : "!text-theme-primary"
                     }`}
                   >
                     {column.name}

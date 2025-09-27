@@ -37,7 +37,7 @@ export default function DeleteBoardModal() {
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50">
-      <div className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white p-6 md:max-w-[480px] md:p-8">
+      <div className="bg-theme-surface relative mx-4 w-full max-w-[343px] rounded-lg p-6 md:max-w-[480px] md:p-8">
         <h2 className="heading-l pb-4 text-[#EA5555] md:pb-6">
           Delete this board?
         </h2>

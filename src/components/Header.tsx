@@ -102,7 +102,7 @@ function Header() {
         Mobile Header Layout
         Optimized for small screens with compact design and icon-based navigation
       */}
-      <div className="bg-theme-primary relative z-60 grid w-full grid-cols-[25px_250px_1fr] items-center justify-between px-4 py-[17px] md:hidden">
+      <div className="bg-theme-primary relative z-60 grid w-full grid-cols-[25px_240px_1fr] items-center justify-between px-4 py-[17px] md:hidden">
         {/* Mobile logo and boards toggle */}
         <button
           aria-label="Open boards"
@@ -140,10 +140,10 @@ function Header() {
         <div className="flex items-center gap-4">
           {/* Add task button with visual feedback */}
           <Button
-            variant="secondary"
+            variant="primary"
             size="sm"
             onClick={() => openTasksModal()}
-            className={`${tasks.length !== 0 ? "" : "opacity-20"} h-8 w-12 p-0`}
+            className={`${tasks.length !== 0 ? "" : "opacity-20"} h-[32px] w-[48px] p-0`}
           >
             <Image
               alt="add task button"
@@ -173,13 +173,13 @@ function Header() {
               <div className="absolute top-full right-0 z-50 mt-2 w-48 rounded-lg border border-gray-200 bg-white py-2 shadow-lg">
                 <button
                   onClick={handleEditBoard}
-                  className="w-full px-4 py-2 text-left text-gray-700 transition-colors hover:bg-gray-50"
+                  className="w-full cursor-pointer px-4 py-2 text-left text-gray-700 transition-colors hover:bg-gray-50"
                 >
                   Edit Board
                 </button>
                 <button
                   onClick={handleDeleteBoard}
-                  className="w-full px-4 py-2 text-left text-red-600 transition-colors hover:bg-red-50"
+                  className="w-full cursor-pointer px-4 py-2 text-left text-red-600 transition-colors hover:bg-red-50"
                 >
                   Delete Board
                 </button>
@@ -234,7 +234,7 @@ function Header() {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center justify-center rounded-lg transition-colors hover:bg-gray-100 lg:pr-2"
+              className="flex cursor-pointer items-center justify-center rounded-lg transition-colors hover:bg-gray-100 lg:pr-2"
               aria-label="Board options"
             >
               <Image
@@ -250,13 +250,13 @@ function Header() {
               <div className="absolute top-full right-0 z-50 mt-2 w-48 rounded-lg border border-gray-200 bg-white py-2 shadow-lg">
                 <button
                   onClick={handleEditBoard}
-                  className="w-full px-4 py-2 text-left text-gray-700 transition-colors hover:bg-gray-50"
+                  className="w-full cursor-pointer px-4 py-2 text-left text-gray-700 transition-colors hover:bg-gray-50"
                 >
                   Edit Board
                 </button>
                 <button
                   onClick={handleDeleteBoard}
-                  className="w-full px-4 py-2 text-left text-red-600 transition-colors hover:bg-red-50"
+                  className="w-full cursor-pointer px-4 py-2 text-left text-red-600 transition-colors hover:bg-red-50"
                 >
                   Delete Board
                 </button>

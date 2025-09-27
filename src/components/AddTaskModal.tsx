@@ -309,18 +309,18 @@ export default function AddTaskModal() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white p-6 md:max-w-[480px]"
+        className="bg-theme-surface relative mx-4 w-full max-w-[343px] rounded-lg p-6 shadow-lg md:max-w-[480px]"
       >
         <h2 className="heading-l pb-6">Add New Task</h2>
         <form onSubmit={handleSubmit} className="flex flex-col">
-          <label className="heading-s text-secondary pb-2">Title</label>
+          <label className="heading-s text-theme-label pb-2">Title</label>
           <div className="flex flex-col">
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className={`placeholder:text-dark-bg/25 w-full rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium ${
-                errors.title ? "border-red-500" : "border-gray-300"
+              className={`bg-theme-surface text-theme-primary placeholder:text-theme-secondary/50 w-full rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium ${
+                errors.title ? "border-red-500" : "border-theme"
               }`}
               placeholder="e.g. Take coffee break"
             />
@@ -329,17 +329,19 @@ export default function AddTaskModal() {
             )}
           </div>
 
-          <label className="heading-s text-secondary pt-6 pb-2">
+          <label className="heading-s text-theme-label pt-6 pb-2">
             Description
           </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="placeholder:text-dark-bg/25 h-[112px] w-full resize-none rounded border border-gray-300 px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
+            className="border-theme bg-theme-surface text-theme-primary placeholder:text-theme-secondary/50 h-[112px] w-full resize-none rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
             placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."
           />
 
-          <label className="heading-s text-secondary pt-6 pb-2">Subtasks</label>
+          <label className="heading-s text-theme-label pt-6 pb-2">
+            Subtasks
+          </label>
           {subtasks.map((subtask, index) => (
             <div key={index} className="mb-3">
               <div className="flex items-center justify-between">
@@ -348,10 +350,10 @@ export default function AddTaskModal() {
                     type="text"
                     value={subtask.title}
                     onChange={(e) => updateSubtask(index, e.target.value)}
-                    className={`placeholder:text-dark-bg/25 w-full rounded border px-4 py-2 pr-24 placeholder:text-[13px] placeholder:font-medium ${
+                    className={`bg-theme-surface text-theme-primary placeholder:text-theme-secondary/50 w-full rounded border px-4 py-2 pr-24 placeholder:text-[13px] placeholder:font-medium ${
                       errors.subtasks?.[index]
                         ? "border-red-500"
-                        : "border-gray-300"
+                        : "border-theme"
                     }`}
                     placeholder="e.g. Make coffee"
                   />
@@ -362,13 +364,17 @@ export default function AddTaskModal() {
                   )}
                 </div>
                 <Button
-                  variant="destructive"
+                  variant="secondary"
                   size="sm"
                   type="button"
                   onClick={() => removeSubtask(index)}
                   className="ml-4 !h-8 !w-8 !p-0"
                 >
-                  ✕
+                  <img
+                    src="/icon-cross.svg"
+                    alt="Remove subtask"
+                    className="h-4 w-4"
+                  />
                 </Button>
               </div>
             </div>
@@ -379,12 +385,12 @@ export default function AddTaskModal() {
             size="sm"
             type="button"
             onClick={addSubtask}
-            className="mb-6"
+            className="bg-theme-subtask-button mb-6 !text-[#635FC7] hover:!bg-[#635FC7]/20 dark:hover:!bg-gray-100"
           >
             + Add New Subtask
           </Button>
 
-          <label className="heading-s text-secondary pb-2">Status</label>
+          <label className="heading-s text-theme-label pb-2">Status</label>
           <div className="relative mb-6" ref={dropdownRef}>
             {/* Custom dropdown button */}
             <Button
@@ -392,7 +398,7 @@ export default function AddTaskModal() {
               size="sm"
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="w-full justify-start !rounded-xl !py-3"
+              className="!bg-theme-surface w-full !justify-start !rounded !border !border-[#828FA3]/25 !px-4 !py-3 !text-white"
             >
               {getSelectedColumnName()}
             </Button>
@@ -400,9 +406,9 @@ export default function AddTaskModal() {
             {/* Dropdown arrow icon */}
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
               <svg
-                className={`h-4 w-4 text-gray-400 transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
+                className={`text-primary h-4 w-4 transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
                 fill="none"
-                stroke="currentColor"
+                stroke="#635FC7"
                 viewBox="0 0 24 24"
               >
                 <path
@@ -416,7 +422,7 @@ export default function AddTaskModal() {
 
             {/* Custom dropdown menu */}
             {isDropdownOpen && (
-              <div className="absolute top-full right-0 left-0 z-10 mt-1 rounded-xl border border-gray-200 bg-white shadow-lg">
+              <div className="border-theme bg-theme-surface absolute top-full right-0 left-0 z-10 mt-1 rounded-xl border shadow-lg">
                 {currentBoard?.board_columns?.map((column) => (
                   <Button
                     key={column.id}
@@ -424,7 +430,7 @@ export default function AddTaskModal() {
                     size="sm"
                     type="button"
                     onClick={() => handleColumnSelect(column.id)}
-                    className="w-full justify-start !rounded-none !py-3 text-gray-400 first:!rounded-t-xl last:!rounded-b-xl"
+                    className="!bg-theme-surface !text-theme-primary hover:!bg-theme-secondary w-full justify-start !rounded-none !py-3 first:!rounded-t-xl last:!rounded-b-xl"
                   >
                     {column.name}
                   </Button>

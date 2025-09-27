@@ -60,8 +60,10 @@ export default function AddBoardModal() {
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50">
-      <div className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white p-6">
-        <h2 className="pb-6 text-lg font-bold text-[#000112]">Add New Board</h2>
+      <div className="bg-theme-surface relative mx-4 w-full max-w-[343px] rounded-lg p-6">
+        <h2 className="text-theme-primary pb-6 text-lg font-bold">
+          Add New Board
+        </h2>
         <form onSubmit={handleSubmit} className="flex flex-col">
           <label className="text-3 text-text-secondary pb-2 font-bold">
             Board Name
@@ -70,7 +72,7 @@ export default function AddBoardModal() {
             type="text"
             value={boardName}
             onChange={(e) => setBoardName(e.target.value)}
-            className="placeholder:text-dark-bg/25 w-full rounded border border-gray-300 px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
+            className="placeholder:text-theme-secondary/50 border-theme text-theme-primary w-full rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
             placeholder="e.g. Web Design"
             required
           />
@@ -84,7 +86,7 @@ export default function AddBoardModal() {
                 type="text"
                 value={column.name}
                 onChange={(e) => updateColumn(index, e.target.value)}
-                className="placeholder:text-dark-bg/25 w-full rounded border border-gray-300 px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
+                className="placeholder:text-theme-secondary/50 border-theme text-theme-primary w-full rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
                 placeholder="e.g. Todo"
                 required
               />
@@ -96,7 +98,11 @@ export default function AddBoardModal() {
                 className="ml-4 !h-8 !w-8 !p-0"
                 disabled={columns.length === 1}
               >
-                ✕
+                <img
+                  src="/icon-cross.svg"
+                  alt="Remove column"
+                  className="h-4 w-4"
+                />
               </Button>
             </div>
           ))}

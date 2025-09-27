@@ -58,7 +58,7 @@ function BoardsModal() {
             boards.map((board) => (
               <div
                 key={board.id}
-                className={`flex w-[240px] cursor-pointer gap-3 pt-[14px] pb-[15px] pl-6 hover:rounded-3xl hover:bg-gray-100 ${
+                className={`hover:bg-theme-secondary flex w-[240px] cursor-pointer gap-3 pt-[14px] pb-[15px] pl-6 hover:rounded-3xl ${
                   currentBoard?.id === board.id
                     ? "bg-primary rounded-r-3xl"
                     : ""
@@ -89,7 +89,7 @@ function BoardsModal() {
           )}
           {boards.length > 0 && (
             <div
-              className="flex cursor-pointer gap-3 pt-[14px] pb-[15px] pl-6 hover:bg-gray-100"
+              className="hover:bg-theme-secondary flex cursor-pointer gap-3 pt-[14px] pb-[15px] pl-6"
               onClick={openAddBoardModal}
             >
               <Image
@@ -128,7 +128,7 @@ function BoardsModal() {
 
       {/* Tablet+ - left sliding drawer */}
       <div
-        className={`absolute top-0 left-0 z-70 hidden h-[100vh] w-[300px] transform border-r border-[#E4EBFA] bg-white transition-all duration-300 ease-out md:block ${
+        className={`border-theme bg-theme-surface absolute top-0 left-0 z-70 hidden h-[100vh] w-[300px] transform border-r transition-all duration-300 ease-out md:block ${
           isBoardsModalEntered
             ? "visible translate-x-0 opacity-100"
             : "invisible -translate-x-full opacity-0"
@@ -177,7 +177,7 @@ function BoardsModal() {
               boards.map((board) => (
                 <div
                   key={board.id}
-                  className={`flex cursor-pointer gap-3 pt-[14px] pb-[15px] pl-8 hover:bg-gray-100 ${
+                  className={`hover:bg-theme-secondary flex cursor-pointer gap-3 pt-[14px] pb-[15px] pl-8 ${
                     currentBoard?.id === board.id
                       ? "bg-primary rounded-r-3xl"
                       : ""
@@ -208,7 +208,7 @@ function BoardsModal() {
             )}
             {boards.length > 0 && (
               <div
-                className="flex cursor-pointer gap-3 pt-[14px] pb-[15px] pl-8 hover:bg-gray-100"
+                className="hover:bg-theme-secondary flex cursor-pointer gap-3 pt-[14px] pb-[15px] pl-8"
                 onClick={openAddBoardModal}
               >
                 <Image
@@ -251,7 +251,7 @@ function BoardsModal() {
             <div className="mt-4 mr-4">
               <button
                 onClick={handleCloseSidebar}
-                className="flex w-full items-center gap-3 rounded-lg py-3 pl-3 text-left transition-colors hover:bg-gray-100"
+                className="hover:bg-theme-secondary flex w-full items-center gap-3 rounded-lg py-3 pl-3 text-left transition-colors"
               >
                 <Image
                   src="/icon-hide-sidebar.svg"

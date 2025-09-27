@@ -81,22 +81,24 @@ export default function EditBoardModal() {
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50">
-      <div className="relative mx-4 w-full max-w-[480px] rounded-lg bg-white p-6">
-        <h2 className="pb-6 text-lg font-bold text-[#000112]">Edit Board</h2>
+      <div className="bg-theme-surface relative mx-4 w-full max-w-[480px] rounded-lg p-6">
+        <h2 className="text-theme-primary pb-6 text-lg font-bold">
+          Edit Board
+        </h2>
         <form onSubmit={handleSubmit} className="flex flex-col">
-          <label className="text-3 text-text-secondary pb-2 font-bold">
+          <label className="text-3 text-theme-primary pb-2 font-bold">
             Board Name
           </label>
           <input
             type="text"
             value={boardName}
             onChange={(e) => setBoardName(e.target.value)}
-            className="placeholder:text-dark-bg/25 w-full rounded border border-gray-300 px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
+            className="placeholder:text-theme-secondary/50 border-theme text-theme-primary bg-theme-secondary w-full rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
             placeholder="e.g. Web Design"
             required
           />
 
-          <label className="text-3 text-text-secondary pt-6 pb-2 font-bold">
+          <label className="text-3 text-theme-primary pt-6 pb-2 font-bold">
             Board Columns
           </label>
           {columns.map((column, index) => (
@@ -105,17 +107,21 @@ export default function EditBoardModal() {
                 type="text"
                 value={column.name}
                 onChange={(e) => updateColumn(index, e.target.value)}
-                className="placeholder:text-dark-bg/25 w-full rounded border border-gray-300 px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
+                className="placeholder:text-theme-secondary/50 border-theme text-theme-primary bg-theme-secondary w-full rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
                 placeholder="e.g. Todo"
                 required
               />
               <button
                 type="button"
                 onClick={() => removeColumn(index)}
-                className="ml-4 text-[#979797] hover:text-red-700"
+                className="text-theme-secondary ml-4 hover:text-red-700"
                 disabled={columns.length === 1}
               >
-                ✕
+                <img
+                  src="/icon-cross.svg"
+                  alt="Remove column"
+                  className="h-4 w-4"
+                />
               </button>
             </div>
           ))}
@@ -125,7 +131,7 @@ export default function EditBoardModal() {
             size="sm"
             type="button"
             onClick={addColumn}
-            className="mb-6"
+            className="!text-primary mb-6 !bg-white"
           >
             + Add New Column
           </Button>

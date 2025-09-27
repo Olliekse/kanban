@@ -27,11 +27,11 @@ export default function DeleteTaskModal() {
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50">
-      <div className="relative mx-4 w-full max-w-[343px] rounded-lg bg-white p-6 md:max-w-[480px] md:p-8">
+      <div className="bg-theme-surface relative mx-4 w-full max-w-[343px] rounded-lg p-6 md:max-w-[480px] md:p-8">
         <h2 className="pb-4 text-[18px] font-bold text-[#EA5555] md:pb-6 md:text-[20px]">
           Delete this task?
         </h2>
-        <p className="text-[13px] leading-[23px] font-medium text-[#828FA3] md:text-[14px] md:leading-[24px]">
+        <p className="text-theme-secondary text-[13px] leading-[23px] font-medium md:text-[14px] md:leading-[24px]">
           Are you sure you want to delete the &apos;{selectedTask.title}&apos;
           task and its subtasks? This action cannot be reversed.
         </p>
@@ -44,7 +44,7 @@ export default function DeleteTaskModal() {
           </button>
           <button
             onClick={() => closeDeleteTaskModal()}
-            className="h-10 w-full cursor-pointer rounded-3xl bg-[#E4EBFA] font-bold text-[#635FC7] transition-colors hover:bg-[#C8D0E8] md:h-12"
+            className="bg-theme-secondary text-primary hover:bg-theme-secondary/80 h-10 w-full cursor-pointer rounded-3xl font-bold transition-colors md:h-12"
           >
             Cancel
           </button>

@@ -246,7 +246,7 @@ export default function Home() {
           <div className="flex h-[calc(100vh-200px)] min-h-[400px] items-center justify-center">
             <button
               onClick={openAddColumnModal}
-              className="bg-theme-new-column hover:bg-theme-secondary text-theme-secondary hover:text-theme-primary flex h-full w-full cursor-pointer items-center justify-center rounded-lg transition-colors duration-200 md:h-[814px]"
+              className="bg-theme-new-column hover:bg-theme-secondary text-theme-secondary hover:text-theme-primary mt-[63px] flex h-full w-full cursor-pointer items-center justify-center rounded-lg transition-colors duration-200 md:h-[814px]"
             >
               <span className="text-[24px] font-bold">+ New Column</span>
             </button>

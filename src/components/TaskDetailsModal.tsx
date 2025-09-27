@@ -72,7 +72,7 @@ function TaskDetailsModal() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative mx-4 w-full max-w-[480px] rounded-lg bg-white px-4 py-6"
+        className="bg-theme-surface relative mx-4 w-full max-w-[480px] rounded-lg px-4 py-6"
       >
         <div className="flex flex-col gap-6">
           <div className="flex items-start justify-between">
@@ -92,7 +92,7 @@ function TaskDetailsModal() {
                 />
               </button>
               {menuOpen && (
-                <div className="absolute right-0 z-10 mt-2 w-40 rounded-md bg-white p-2 shadow-lg">
+                <div className="bg-theme-surface absolute right-0 z-10 mt-2 w-40 rounded-md p-2 shadow-lg">
                   <Button
                     variant="secondary"
                     size="sm"
@@ -122,7 +122,7 @@ function TaskDetailsModal() {
         </div>
         <div className="mt-4 mb-6 flex flex-col gap-2">
           {selectedTask.subtasks?.map((s) => (
-            <div key={s.id} className="flex gap-4 bg-[#f4f7fd] p-3">
+            <div key={s.id} className="bg-theme-secondary flex gap-4 p-3">
               <input
                 type="checkbox"
                 checked={s.completed}
@@ -132,7 +132,9 @@ function TaskDetailsModal() {
               />
               <p
                 className={`heading-s ${
-                  s.completed ? "text-gray-400 line-through" : "text-[#000112]"
+                  s.completed
+                    ? "text-theme-secondary line-through"
+                    : "text-theme-primary"
                 }`}
               >
                 {s.title}
@@ -146,7 +148,7 @@ function TaskDetailsModal() {
             <select
               value={selectedTask.column_id}
               disabled
-              className="w-full cursor-not-allowed appearance-none rounded border border-[#828FA3]/25 px-4 py-2 pr-10 opacity-80"
+              className="border-theme-secondary/25 text-theme-primary w-full cursor-not-allowed appearance-none rounded border px-4 py-2 pr-10 opacity-80"
             >
               {currentBoard?.board_columns?.map((column) => (
                 <option key={column.id} value={column.id}>

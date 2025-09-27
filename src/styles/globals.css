@@ -17,10 +17,12 @@
   --color-bg-secondary: #f4f7fd;
   --color-text-primary: #000112;
   --color-text-secondary: #828fa3;
+  --color-text-label: #828fa3;
   --color-border: #e4ebfa;
   --color-surface: #ffffff;
   --color-surface-secondary: #f4f7fd;
   --color-new-column-bg: #e9effa;
+  --color-subtask-button-bg: #635fc710;
 }
 
 /* Dark theme overrides */
@@ -29,10 +31,12 @@
   --color-bg-secondary: #20212c;
   --color-text-primary: #ffffff;
   --color-text-secondary: #828fa3;
+  --color-text-label: #ffffff;
   --color-border: #3e3f4e;
   --color-surface: #2b2c37;
   --color-surface-secondary: #20212c;
   --color-new-column-bg: #2b2c37;
+  --color-subtask-button-bg: #ffffff;
 }
 
 /* Additional utility classes for theme-aware styling */
@@ -60,12 +64,20 @@
   color: var(--color-text-secondary);
 }
 
+.text-theme-label {
+  color: var(--color-text-label);
+}
+
 .border-theme {
   border-color: var(--color-border);
 }
 
 .bg-theme-new-column {
   background-color: var(--color-new-column-bg);
+}
+
+.bg-theme-subtask-button {
+  background-color: var(--color-subtask-button-bg) !important;
 }
 
 /* Typography scale and utilities 
@@ -132,7 +144,6 @@ body {
   line-height: var(--lh-15);
   font-weight: 700;
   letter-spacing: 2.4px;
-  text-transform: uppercase;
 }
 
 /* Body text styles */
@@ -282,7 +293,7 @@ select,
 
 .btn--sm {
   padding: 0.5rem 1.25rem;
-  min-height: 40px;
+  min-height: 32px;
   font-size: 0.9375rem; /* 15px */
 }
 
@@ -295,7 +306,6 @@ select,
 .btn-primary:hover,
 .btn-primary:focus-visible {
   background: var(--color-primary-light);
-  color: #fff;
 }
 
 /* Secondary: white background with primary text; on hover becomes primary filled */
@@ -305,10 +315,10 @@ select,
   border: 1px solid transparent;
   box-shadow: none;
 }
+
 .btn-secondary:hover,
 .btn-secondary:focus-visible {
   background: var(--color-primary);
-  color: #ffffff;
 }
 
 /* Destructive */
@@ -319,7 +329,6 @@ select,
 .btn-destructive:hover,
 .btn-destructive:focus-visible {
   background: var(--color-danger-light);
-  color: #fff;
 }
 
 /* Ensure focus-visible uses contrast-friendly outline (if used alongside the built-in outline) */
