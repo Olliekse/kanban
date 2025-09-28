@@ -99,7 +99,7 @@ function BoardsModal() {
                 width={16}
                 alt="board icon"
               />
-              <p className="text-theme-secondary text-[15px] font-bold">
+              <p className="!text-primary text-[15px] font-bold">
                 + Create New Board
               </p>
             </div>
@@ -218,7 +218,7 @@ function BoardsModal() {
                   width={16}
                   alt="board icon"
                 />
-                <p className="text-primary text-[15px] font-bold">
+                <p className="!text-primary text-[15px] font-bold">
                   + Create New Board
                 </p>
               </div>

@@ -1,81 +1,30 @@
 {
   "pages": {
-    "/_not-found/page": [
-      "static/chunks/webpack-8bbf43b3f4425ee7.js",
-      "static/chunks/4bd1b696-3bd4cf4e5bec0624.js",
-      "static/chunks/255-8a0219e5f24cf7d9.js",
-      "static/chunks/main-app-d85ca61e83b4cf49.js",
-      "static/chunks/app/_not-found/page-3d526dbc95ba87a7.js"
-    ],
     "/layout": [
-      "static/chunks/webpack-8bbf43b3f4425ee7.js",
-      "static/chunks/4bd1b696-3bd4cf4e5bec0624.js",
-      "static/chunks/255-8a0219e5f24cf7d9.js",
-      "static/chunks/main-app-d85ca61e83b4cf49.js",
-      "static/css/01b269d0cd3dfcf3.css",
-      "static/chunks/239-e5a90e2a60ae59a5.js",
-      "static/chunks/758-3b52d81e55dbfaca.js",
-      "static/chunks/app/layout-75cb692de6190518.js"
-    ],
-    "/api/boards/[id]/route": [
-      "static/chunks/webpack-8bbf43b3f4425ee7.js",
-      "static/chunks/4bd1b696-3bd4cf4e5bec0624.js",
-      "static/chunks/255-8a0219e5f24cf7d9.js",
-      "static/chunks/main-app-d85ca61e83b4cf49.js",
-      "static/chunks/app/api/boards/[id]/route-e278fde0574a0a07.js"
-    ],
-    "/api/columns/route": [
-      "static/chunks/webpack-8bbf43b3f4425ee7.js",
-      "static/chunks/4bd1b696-3bd4cf4e5bec0624.js",
-      "static/chunks/255-8a0219e5f24cf7d9.js",
-      "static/chunks/main-app-d85ca61e83b4cf49.js",
-      "static/chunks/app/api/columns/route-e278fde0574a0a07.js"
-    ],
-    "/api/boards/route": [
-      "static/chunks/webpack-8bbf43b3f4425ee7.js",
-      "static/chunks/4bd1b696-3bd4cf4e5bec0624.js",
-      "static/chunks/255-8a0219e5f24cf7d9.js",
-      "static/chunks/main-app-d85ca61e83b4cf49.js",
-      "static/chunks/app/api/boards/route-e278fde0574a0a07.js"
-    ],
-    "/api/subtasks/[id]/route": [
-      "static/chunks/webpack-8bbf43b3f4425ee7.js",
-      "static/chunks/4bd1b696-3bd4cf4e5bec0624.js",
-      "static/chunks/255-8a0219e5f24cf7d9.js",
-      "static/chunks/main-app-d85ca61e83b4cf49.js",
-      "static/chunks/app/api/subtasks/[id]/route-e278fde0574a0a07.js"
-    ],
-    "/api/subtasks/batch/route": [
-      "static/chunks/webpack-8bbf43b3f4425ee7.js",
-      "static/chunks/4bd1b696-3bd4cf4e5bec0624.js",
-      "static/chunks/255-8a0219e5f24cf7d9.js",
-      "static/chunks/main-app-d85ca61e83b4cf49.js",
-      "static/chunks/app/api/subtasks/batch/route-e278fde0574a0a07.js"
-    ],
-    "/api/tasks/[id]/route": [
-      "static/chunks/webpack-8bbf43b3f4425ee7.js",
-      "static/chunks/4bd1b696-3bd4cf4e5bec0624.js",
-      "static/chunks/255-8a0219e5f24cf7d9.js",
-      "static/chunks/main-app-d85ca61e83b4cf49.js",
-      "static/chunks/app/api/tasks/[id]/route-e278fde0574a0a07.js"
-    ],
-    "/api/tasks/route": [
-      "static/chunks/webpack-8bbf43b3f4425ee7.js",
-      "static/chunks/4bd1b696-3bd4cf4e5bec0624.js",
-      "static/chunks/255-8a0219e5f24cf7d9.js",
-      "static/chunks/main-app-d85ca61e83b4cf49.js",
-      "static/chunks/app/api/tasks/route-e278fde0574a0a07.js"
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/layout.css",
+      "static/chunks/app/layout.js"
     ],
     "/page": [
-      "static/chunks/webpack-8bbf43b3f4425ee7.js",
-      "static/chunks/4bd1b696-3bd4cf4e5bec0624.js",
-      "static/chunks/255-8a0219e5f24cf7d9.js",
-      "static/chunks/main-app-d85ca61e83b4cf49.js",
-      "static/chunks/602dbae6-6eba18f6a2389cbb.js",
-      "static/chunks/239-e5a90e2a60ae59a5.js",
-      "static/chunks/260-c05cd74e846b1dbe.js",
-      "static/chunks/758-3b52d81e55dbfaca.js",
-      "static/chunks/app/page-19293afcf883cba7.js"
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
+    "/api/tasks/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/tasks/route.js"
+    ],
+    "/api/boards/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/boards/route.js"
+    ],
+    "/api/tasks/[id]/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/tasks/[id]/route.js"
     ]
   }
 }
