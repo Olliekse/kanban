@@ -308,9 +308,9 @@ select,
   background: var(--color-primary-light);
 }
 
-/* Secondary: white background with primary text; on hover becomes primary filled */
+/* Secondary: dark background with primary text; on hover becomes primary filled */
 .btn-secondary {
-  background: var(--color-surface);
+  background: var(--color-bg-secondary);
   color: var(--color-primary);
   border: 1px solid transparent;
   box-shadow: none;
@@ -319,6 +319,7 @@ select,
 .btn-secondary:hover,
 .btn-secondary:focus-visible {
   background: var(--color-primary);
+  color: #ffffff;
 }
 
 /* Destructive */
@@ -397,7 +398,7 @@ select,
 }
 
 [data-theme="dark"] .btn-secondary {
-  background: var(--color-surface);
+  background: var(--color-bg-secondary);
   color: var(--color-primary);
 }
 [data-theme="dark"] .btn-secondary:hover,

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 import { useModal } from "@/contexts/ModalContext";
 import { useTasks } from "@/contexts/TasksContext";
 import { useBoards } from "@/contexts/BoardsContext";
@@ -144,27 +145,27 @@ export default function EditTaskModal() {
       <div className="bg-theme-surface relative mx-4 w-full max-w-[343px] rounded-lg p-6 md:max-w-[480px]">
         <h2 className="heading-l pb-6">Edit Task</h2>
         <form onSubmit={handleSubmit} className="flex flex-col">
-          <label className="heading-s text-theme-primary pb-2">Title</label>
+          <label className="heading-s text-theme-label pb-2">Title</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="placeholder:text-theme-secondary/50 border-theme text-theme-primary bg-theme-secondary w-full rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
+            className="placeholder:text-theme-secondary/50 border-theme text-theme-primary bg-theme-surface focus:border-primary w-full rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium focus:outline-none"
             placeholder="e.g. Take coffee break"
             required
           />
 
-          <label className="heading-s text-theme-primary pt-6 pb-2">
+          <label className="heading-s text-theme-label pt-6 pb-2">
             Description
           </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="placeholder:text-theme-secondary/50 border-theme text-theme-primary bg-theme-secondary h-[112px] w-full resize-none rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
+            className="placeholder:text-theme-secondary/50 border-theme text-theme-primary bg-theme-surface focus:border-primary h-[112px] w-full resize-none rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium focus:outline-none"
             placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."
           />
 
-          <label className="heading-s text-theme-primary pt-6 pb-2">
+          <label className="heading-s text-theme-label pt-6 pb-2">
             Subtasks
           </label>
           {subtasks.map((subtask, index) => (
@@ -176,22 +177,22 @@ export default function EditTaskModal() {
                 type="text"
                 value={subtask.title}
                 onChange={(e) => updateSubtask(index, e.target.value)}
-                className="placeholder:text-theme-secondary/50 border-theme text-theme-primary bg-theme-secondary w-full rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
+                className="placeholder:text-theme-secondary/50 border-theme text-theme-primary bg-theme-surface focus:border-primary w-full rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium focus:outline-none"
                 placeholder="e.g. Make coffee"
               />
-              <Button
-                variant="destructive"
-                size="sm"
+              <button
                 type="button"
                 onClick={() => removeSubtask(index)}
-                className="ml-4 !h-8 !w-8 !p-0"
+                className="ml-4 h-8 w-8 bg-transparent p-0 hover:bg-transparent"
               >
-                <img
+                <Image
                   src="/icon-cross.svg"
                   alt="Remove subtask"
+                  width={16}
+                  height={16}
                   className="h-4 w-4"
                 />
-              </Button>
+              </button>
             </div>
           ))}
 
@@ -200,30 +201,24 @@ export default function EditTaskModal() {
             size="sm"
             type="button"
             onClick={addSubtask}
-            className="!text-primary mb-6 !bg-white"
+            className="bg-theme-subtask-button !text-primary hover:!bg-primary/20 mb-6"
           >
             + Add New Subtask
           </Button>
 
-          <label className="heading-s text-theme-primary pb-2">Status</label>
+          <label className="heading-s text-theme-label pb-2">Status</label>
           <div className="relative mb-6" ref={dropdownRef}>
             {/* Custom dropdown button */}
-            <Button
-              variant="secondary"
-              size="sm"
+            <button
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="!border-theme !bg-theme-secondary w-full justify-start !rounded-xl !px-4 !py-3 !text-white"
+              className="!bg-theme-surface !border-primary !text-theme-primary flex w-full items-center justify-between !rounded !border !px-4 !py-3 text-left"
             >
-              {getSelectedColumnName()}
-            </Button>
-
-            {/* Dropdown arrow icon */}
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+              <span>{getSelectedColumnName()}</span>
               <svg
                 className={`text-primary h-4 w-4 transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
                 fill="none"
-                stroke="currentColor"
+                stroke="#635FC7"
                 viewBox="0 0 24 24"
               >
                 <path
@@ -233,26 +228,24 @@ export default function EditTaskModal() {
                   d="M19 9l-7 7-7-7"
                 />
               </svg>
-            </div>
+            </button>
 
             {/* Custom dropdown menu */}
             {isDropdownOpen && (
-              <div className="border-theme bg-theme-surface absolute top-full right-0 left-0 z-10 mt-1 rounded-xl border shadow-lg">
+              <div className="bg-theme-surface absolute top-full right-0 left-0 z-10 mt-1 rounded-xl shadow-lg">
                 {currentBoard?.board_columns?.map((column) => (
-                  <Button
+                  <button
                     key={column.id}
-                    variant="secondary"
-                    size="sm"
                     type="button"
                     onClick={() => handleColumnSelect(column.id)}
-                    className={`!bg-theme-secondary w-full justify-start !rounded-none !py-3 first:!rounded-t-xl last:!rounded-b-xl ${
+                    className={`!bg-theme-surface hover:!bg-theme-secondary w-full !rounded-none px-4 !py-3 text-left first:!rounded-t-xl last:!rounded-b-xl ${
                       columnId === column.id
                         ? "!text-theme-primary font-medium"
                         : "!text-theme-primary"
                     }`}
                   >
                     {column.name}
-                  </Button>
+                  </button>
                 )) || []}
               </div>
             )}

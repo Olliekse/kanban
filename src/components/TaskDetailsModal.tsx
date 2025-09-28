@@ -97,7 +97,7 @@ function TaskDetailsModal() {
                     variant="secondary"
                     size="sm"
                     onClick={handleEdit}
-                    className="w-full justify-start !rounded-md !py-2"
+                    className="w-full justify-start !rounded-md !py-2 !text-[#828FA3]"
                   >
                     Edit Task
                   </Button>
@@ -122,12 +122,15 @@ function TaskDetailsModal() {
         </div>
         <div className="mt-4 mb-6 flex flex-col gap-2">
           {selectedTask.subtasks?.map((s) => (
-            <div key={s.id} className="bg-theme-secondary flex gap-4 p-3">
+            <div
+              key={s.id}
+              className="bg-theme-secondary hover:bg-theme-subtask-button flex gap-4 rounded p-3 transition-colors"
+            >
               <input
                 type="checkbox"
                 checked={s.completed}
                 onChange={() => handleSubtaskToggle(s.id, s.completed)}
-                className="text-primary focus:ring-primary h-4 w-4 cursor-pointer rounded border-gray-300"
+                className="text-primary focus:ring-primary h-4 w-4 cursor-pointer rounded border-2 border-gray-300 bg-white"
                 style={{ accentColor: "var(--color-primary)" }}
               />
               <p

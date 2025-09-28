@@ -3,6 +3,7 @@
 import { useModal } from "@/contexts/ModalContext";
 import { useBoards } from "@/contexts/BoardsContext";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Button from "./Button";
 
 export default function EditBoardModal() {
@@ -117,9 +118,11 @@ export default function EditBoardModal() {
                 className="text-theme-secondary ml-4 hover:text-red-700"
                 disabled={columns.length === 1}
               >
-                <img
+                <Image
                   src="/icon-cross.svg"
                   alt="Remove column"
+                  width={16}
+                  height={16}
                   className="h-4 w-4"
                 />
               </button>

@@ -24,6 +24,7 @@
 
 import { useModal } from "@/contexts/ModalContext";
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { useTasks } from "@/contexts/TasksContext";
 import { useBoards } from "@/contexts/BoardsContext";
 import { z } from "zod";
@@ -319,7 +320,7 @@ export default function AddTaskModal() {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className={`bg-theme-surface text-theme-primary placeholder:text-theme-secondary/50 w-full rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium ${
+              className={`bg-theme-surface text-theme-primary placeholder:text-theme-secondary/50 focus:border-primary w-full rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium focus:outline-none ${
                 errors.title ? "border-red-500" : "border-theme"
               }`}
               placeholder="e.g. Take coffee break"
@@ -335,7 +336,7 @@ export default function AddTaskModal() {
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="border-theme bg-theme-surface text-theme-primary placeholder:text-theme-secondary/50 h-[112px] w-full resize-none rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium"
+            className="border-theme bg-theme-surface text-theme-primary placeholder:text-theme-secondary/50 focus:border-primary h-[112px] w-full resize-none rounded border px-4 py-2 placeholder:text-[13px] placeholder:font-medium focus:outline-none"
             placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."
           />
 
@@ -350,7 +351,7 @@ export default function AddTaskModal() {
                     type="text"
                     value={subtask.title}
                     onChange={(e) => updateSubtask(index, e.target.value)}
-                    className={`bg-theme-surface text-theme-primary placeholder:text-theme-secondary/50 w-full rounded border px-4 py-2 pr-24 placeholder:text-[13px] placeholder:font-medium ${
+                    className={`bg-theme-surface text-theme-primary placeholder:text-theme-secondary/50 focus:border-primary w-full rounded border px-4 py-2 pr-24 placeholder:text-[13px] placeholder:font-medium focus:outline-none ${
                       errors.subtasks?.[index]
                         ? "border-red-500"
                         : "border-theme"
@@ -363,19 +364,19 @@ export default function AddTaskModal() {
                     </span>
                   )}
                 </div>
-                <Button
-                  variant="secondary"
-                  size="sm"
+                <button
                   type="button"
                   onClick={() => removeSubtask(index)}
-                  className="ml-4 !h-8 !w-8 !p-0"
+                  className="ml-4 h-8 w-8 bg-transparent p-0 hover:bg-transparent"
                 >
-                  <img
+                  <Image
                     src="/icon-cross.svg"
                     alt="Remove subtask"
+                    width={16}
+                    height={16}
                     className="h-4 w-4"
                   />
-                </Button>
+                </button>
               </div>
             </div>
           ))}
@@ -385,7 +386,7 @@ export default function AddTaskModal() {
             size="sm"
             type="button"
             onClick={addSubtask}
-            className="bg-theme-subtask-button mb-6 !text-[#635FC7] hover:!bg-[#635FC7]/20 dark:hover:!bg-gray-100"
+            className="bg-theme-subtask-button !text-primary hover:!bg-primary/20 mb-6"
           >
             + Add New Subtask
           </Button>
@@ -393,18 +394,12 @@ export default function AddTaskModal() {
           <label className="heading-s text-theme-label pb-2">Status</label>
           <div className="relative mb-6" ref={dropdownRef}>
             {/* Custom dropdown button */}
-            <Button
-              variant="secondary"
-              size="sm"
+            <button
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="!bg-theme-surface w-full !justify-start !rounded !border !border-[#828FA3]/25 !px-4 !py-3 !text-white"
+              className="!bg-theme-surface !border-primary !text-theme-primary flex w-full items-center justify-between !rounded !border !px-4 !py-3 text-left"
             >
-              {getSelectedColumnName()}
-            </Button>
-
-            {/* Dropdown arrow icon */}
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+              <span>{getSelectedColumnName()}</span>
               <svg
                 className={`text-primary h-4 w-4 transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
                 fill="none"
@@ -418,22 +413,20 @@ export default function AddTaskModal() {
                   d="M19 9l-7 7-7-7"
                 />
               </svg>
-            </div>
+            </button>
 
             {/* Custom dropdown menu */}
             {isDropdownOpen && (
-              <div className="border-theme bg-theme-surface absolute top-full right-0 left-0 z-10 mt-1 rounded-xl border shadow-lg">
+              <div className="bg-theme-surface absolute top-full right-0 left-0 z-10 mt-1 rounded-xl shadow-lg">
                 {currentBoard?.board_columns?.map((column) => (
-                  <Button
+                  <button
                     key={column.id}
-                    variant="secondary"
-                    size="sm"
                     type="button"
                     onClick={() => handleColumnSelect(column.id)}
-                    className="!bg-theme-surface !text-theme-primary hover:!bg-theme-secondary w-full justify-start !rounded-none !py-3 first:!rounded-t-xl last:!rounded-b-xl"
+                    className="!bg-theme-surface hover:!bg-theme-secondary !text-theme-primary w-full !rounded-none px-4 !py-3 text-left first:!rounded-t-xl last:!rounded-b-xl"
                   >
                     {column.name}
-                  </Button>
+                  </button>
                 )) || []}
               </div>
             )}

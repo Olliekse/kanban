@@ -3,6 +3,7 @@
 import { useModal } from "@/contexts/ModalContext";
 import { useBoards } from "@/contexts/BoardsContext";
 import { useState } from "react";
+import Image from "next/image";
 import Button from "./Button";
 
 export default function AddBoardModal() {
@@ -98,9 +99,11 @@ export default function AddBoardModal() {
                 className="ml-4 !h-8 !w-8 !p-0"
                 disabled={columns.length === 1}
               >
-                <img
+                <Image
                   src="/icon-cross.svg"
                   alt="Remove column"
+                  width={16}
+                  height={16}
                   className="h-4 w-4"
                 />
               </Button>
